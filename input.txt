@@ -4,8 +4,8 @@
 /* Integer
    constants */
 
- 0	123	
- 	012	   
+ 0	123
+ 	012
 
 /* Real
    constants */

@@ -1,14 +1,14 @@
 grammar Cmm;	
 
-program: REAL_CONSTANT
+program: INT_CONSTANT
        ;
 
   //  One-line comments starting with //
-  SINGLE_LINE_COMMENT: '//' .* EOF
+  SINGLE_LINE_COMMENT: '//' .*? ([\n] | EOF)
                      -> skip
                      ;
   //  Multiple-line comments starting with /* and ending with */
-  MULTIPLE_LINE_COMMENT: '/*' .* '*/'
+  MULTIPLE_LINE_COMMENT: '/*' .*? '*/'
                        -> skip
                        ;
 
@@ -43,11 +43,12 @@ program: REAL_CONSTANT
   //  Char constants between ' and '. Examples: 'a' '.' '~'
   //  Char constants identifying the ASCII code, e.g. '\126' (any integer constant without sign can be written between ' and ')
   CHAR_CONSTANT: '\'' . '\''
-                | '\'' '\\' INT_CONSTANT '\''
+               | '\'' '\\' INT_CONSTANT '\''
+               | '\'' (. | '\\n' | '\\t') '\''
                ;
 
   //  The two special char constants '\n' and '\t'
   // [\r\n\t   ]+ not necessary the + bc it's triggered whenever appears a blank
-  WS: [\r\n\t   ]
-     ->skip
-     ;
+  WS: [ \r\n\t]
+    -> skip
+    ;
