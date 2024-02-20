@@ -1,6 +1,6 @@
 grammar Cmm;	
 
-program: INT_CONSTANT
+program: ID
        ;
 
   //  One-line comments starting with //
@@ -44,7 +44,7 @@ program: INT_CONSTANT
   //  Char constants identifying the ASCII code, e.g. '\126' (any integer constant without sign can be written between ' and ')
   CHAR_CONSTANT: '\'' . '\''
                | '\'' '\\' INT_CONSTANT '\''
-               | '\'' (. | '\\n' | '\\t') '\''
+               | '\'' (. | '\\n' | '\\t' | '\\r') '\''
                ;
 
   //  The two special char constants '\n' and '\t'
