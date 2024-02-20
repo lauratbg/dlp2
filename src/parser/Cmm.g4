@@ -1,7 +1,39 @@
 grammar Cmm;	
 
-program: ID
-       ;
+expression: '(' expression ')'
+            | expression '[' expression ']' //RECURSION ->
+            //v[1][2]
+            //v[1] = exp 1, [2] = exp 2
+            //v = exp 1.1, [1] = exp 1.2
+            | expression '.' ID //v[2].execute()     a.do()
+//            | '(' type ')' expression
+            | '-' expression
+            | '!' expression
+            | expression ('*' | '/' | '%') expression
+            | expression ('+' | '-') expression
+            | expression ('>' | '>=' | '<' | '<=' | '!=' | '==') expression
+            | expression ('&&' | '||') expression
+            | ID '(' ((expression ',')* expression)? ')'
+            | ID
+            | INT_CONSTANT
+            | REAL_CONSTANT
+            | CHAR_CONSTANT
+            ;
+
+statement: expression '=' expression
+            | 'write' ((expression ',')* expression)+ ';'
+            | 'read' ((expression ',')* expression)+ ';'
+            | 'while' '(' expression ')' block
+            | 'if' '(' expression ')' block
+            | 'if' '(' expression ')' block 'else' block
+            | ID '(' ((expression ',')* expression)? ')' ';'
+            ;
+type: ;
+
+
+block: '{' statement '}'
+      | statement
+      ;
 
   //  One-line comments starting with //
   SINGLE_LINE_COMMENT: '//' .*? ([\n] | EOF)
@@ -31,10 +63,6 @@ program: ID
   REAL_CONSTANT: (REAL | INT_CONSTANT) [Ee] [+-]? INT_CONSTANT
                | REAL
                ;
-
-  //  REAL_CONSTANT: (REAL | INT_CONSTANT) ([Ee] [+-]? INT_CONSTANT)?
-  //                 NO BC IT WILL RECOGNIZE INT_CONSTANT
-  //                 ;
 
   fragment
   NUMBER: [0-9]+

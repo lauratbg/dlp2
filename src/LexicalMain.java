@@ -2,7 +2,7 @@ import parser.*;
 
 import org.antlr.v4.runtime.*;
 
-public class Main {
+public class LexicalMain {
 
 	public static void main(String... args) throws Exception {
 		if (args.length < 1) {
@@ -22,7 +22,6 @@ public class Main {
 			// We get the semantic value of the token
 			Object semanticValue = null;
 			switch (token.getType()) {			
-//			 TODO: Implement the lexemeToChar and lexemeToReal methods in LexerHelper
 			case CmmLexer.CHAR_CONSTANT:
 				semanticValue = LexerHelper.lexemeToChar(token.getText());
 				break;
