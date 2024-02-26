@@ -1,4 +1,7 @@
-grammar Cmm;	
+grammar Cmm;
+
+//A program is a sequence of variable and function definitions.
+program: (varDefinition | functionDefinition)* main;
 
 expression: '(' expression ')'
             | expression '[' expression ']' //RECURSION ->
@@ -6,34 +9,75 @@ expression: '(' expression ')'
             //v[1] = exp 1, [2] = exp 2
             //v = exp 1.1, [1] = exp 1.2
             | expression '.' ID //v[2].execute()     a.do()
-//            | '(' type ')' expression
+            | '(' builtin ')' expression
             | '-' expression
             | '!' expression
             | expression ('*' | '/' | '%') expression
             | expression ('+' | '-') expression
             | expression ('>' | '>=' | '<' | '<=' | '!=' | '==') expression
             | expression ('&&' | '||') expression
-            | ID '(' ((expression ',')* expression)? ')'
+            | functionInvocation
             | ID
             | INT_CONSTANT
             | REAL_CONSTANT
             | CHAR_CONSTANT
             ;
 
-statement: expression '=' expression
+
+statement: expression '=' expression ';'
             | 'write' ((expression ',')* expression)+ ';'
             | 'read' ((expression ',')* expression)+ ';'
             | 'while' '(' expression ')' block
             | 'if' '(' expression ')' block
             | 'if' '(' expression ')' block 'else' block
-            | ID '(' ((expression ',')* expression)? ')' ';'
+            | functionInvocation ';'
+            | 'return' expression? ';'
+            | varDefinition
             ;
-type: ;
 
+// Array types can be created with the "[]" type constructor, following the Java syntax but specifying
+// the size of the array with an integer constant
+// The "struct" type constructor is added for specifying record types.
+// Records have no type identifier, and fields are declared as var definitions between { and }.
+type: type '[' INT_CONSTANT ']'
+    | builtin
+    | 'struct' '{' varDefinition* '}'
+    ;
 
-block: '{' statement '}'
+block: '{' statement* '}'
       | statement
       ;
+
+//type followed by a non-empty enumeration of comma-separated identifiers.
+// Variable definitions must end with the ";" character.
+varDefinition: type ID (',' ID)* ';'
+             ;
+
+//return type, the function identifier and a list of comma-separated parameters between ( and ).
+// Parameter types must be built-in (i.e., no arrays or records).
+// Return types could be built-in or void.
+// The function body goes between { and }.
+functionDefinition: returnType ID '(' ((builtin ID) (',' builtin ID)*)* ')' '{' functionBody '}'
+                  ;
+
+returnType: builtin
+          | 'void'
+          ;
+
+//sequences of variable definitions followed by sequences of statements. Both must end with the ";" character.
+functionBody: (varDefinition statement*)*
+            ;
+functionInvocation:  ID '(' ((expression ',')* expression)? ')' ;
+
+//Built-in types are "int", "double" and "char".
+builtin: 'int'
+       | 'double'
+       | 'char'
+       ;
+
+// returns void and receives no parameters.
+main: 'void' 'main' '(' ')' '{' functionBody '}'
+    ;
 
   //  One-line comments starting with //
   SINGLE_LINE_COMMENT: '//' .*? ([\n] | EOF)
