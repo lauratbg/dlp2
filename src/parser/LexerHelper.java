@@ -12,7 +12,6 @@ public class LexerHelper {
 		return -1;
 	}
 
-	// TODO: Implement the lexemeToChar and lexemeToReal methods
 	public static char lexemeToChar(String str) {
 		try {
 			if(str.charAt(1) == '\\'){

@@ -1,32 +1,61 @@
 grammar Cmm;
 
+@header{
+    import ast.*;
+    import ast.expressions.*;
+    import ast.program.*;
+    import ast.statements.*;
+    import ast.types.*;
+    import ast.types.builtin.*;
+}
+
 //A program is a sequence of variable and function definitions.
 program: (varDefinition | functionDefinition)* main;
 
-expression: '(' expression ')'
-            | expression '[' expression ']' //RECURSION ->
+expression returns [Expression ast]:
+            '(' expression ')'
+                //???????
+            | e1 = expression '[' e2 = expression ']' //RECURSION ->
             //v[1][2]
             //v[1] = exp 1, [2] = exp 2
             //v = exp 1.1, [1] = exp 1.2
-            | expression '.' ID //v[2].execute()     a.do()
-            | '(' builtin ')' expression
-            | '-' expression
-            | '!' expression
-            | expression ('*' | '/' | '%') expression
-            | expression ('+' | '-') expression
+                {$ast = new Indexing($e1.ast.getLine(), $e1.ast.getColumn(), $e1.ast, $e2.ast);}
+            | e = expression '.' ID //v[2].execute()     a.do()
+                {$ast = new FieldAccess($e.ast.getLine(), $e.ast.getColumn(), $ID.text, $e.ast);}
+            | '(' t = builtin ')' e = expression //cast
+                {$ast = new Cast($e.ast.getLine(), $e.ast.getColumn(), $t.ast, $e.ast);}
+            | OP = '-' e = expression
+                {$ast = new UnaryMinus($ID.getLine(), $ID.getCharPositionInLine()+1, $e.ast);}
+            | OP = '!' e = expression
+                {$ast = new UnaryNot($ID.getLine(), $ID.getCharPositionInLine()+1, $e.ast);}
+            | e1 = expression ('%') e2 = expression
+                {$ast = new Arithmetic($e1.ast.getLine(), $e1.ast.getColumn(), $OP.text, $e1.ast, $e2.ast);}
+            | e1 = expression ('%') e2 = expression
+                {$ast = new Modulus($e1.ast.getLine(), $e1.ast.getColumn(), $e1.ast, $e2.ast);}
+            | e1 = expression OP = ('+' | '-') e2 = expression
+                {$ast = new Arithmetic($e1.ast.getLine(), $e1.ast.getColumn(), $OP.text, $e1.ast, $e2.ast);}
             | expression ('>' | '>=' | '<' | '<=' | '!=' | '==') expression
-            | expression ('&&' | '||') expression
+                {$ast = new Comparison($e1.ast.getLine(), $e1.ast.getColumn(), $OP.text, $e1.ast, $e2.ast);}
+            | e1 = expression OP = ('&&' | '||') e2 = expression
+                {$ast = new Logical($e1.ast.getLine(), $e1.ast.getColumn(), $OP.text, $e1.ast, $e2.ast);}
             | functionInvocation
             | ID
-            | INT_CONSTANT
-            | REAL_CONSTANT
-            | CHAR_CONSTANT
+                {$ast = new Variable($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text);}
+            | IC = INT_CONSTANT
+                {$ast = new Int_Literal($ID.getLine(), $ID.getCharPositionInLine()+1, LexerHelper.lexemeToInt($IC.text));}
+            | RC = REAL_CONSTANT
+                {$ast = new Real_Literal($ID.getLine(), $ID.getCharPositionInLine()+1, LexerHelper.lexemeToReal($RC.text));}
+            | CC = CHAR_CONSTANT
+                {$ast = new Char_Literal($ID.getLine(), $ID.getCharPositionInLine()+1, LexerHelper.lexemeToChar($CC.text));}
             ;
 
 
-statement: expression '=' expression ';'
-            | 'write' ((expression ',')* expression)+ ';'
-            | 'read' ((expression ',')* expression)+ ';'
+statement returns [Statement ast]
+          locals [List<Statement> list = new ArrayList<>()]:
+            e1 = expression '=' e2 = expression ';'
+                {$ast = new Assignment($e1.ast.getLine(), $e1.ast.getColumn(), $e1.ast, $e2.ast); }
+            | W = 'write' ((e1 = expression ',')* e2 = expression) ';'
+            | 'read' ((expression ',')* expression) ';'
             | 'while' '(' expression ')' block
             | 'if' '(' expression ')' block
             | 'if' '(' expression ')' block 'else' block
@@ -34,6 +63,11 @@ statement: expression '=' expression ';'
             | 'return' expression? ';'
             | varDefinition
             ;
+
+//TODO: non-empty comma-separated list of expressions. FOR READ AND WRITE
+expressionList returns [List<Expression> ast = new ArrayList<>();]:
+              (expression ',')* expression
+              ;
 
 // Array types can be created with the "[]" type constructor, following the Java syntax but specifying
 // the size of the array with an integer constant
@@ -70,9 +104,10 @@ functionBody: (varDefinition statement*)*
 functionInvocation:  ID '(' ((expression ',')* expression)? ')' ;
 
 //Built-in types are "int", "double" and "char".
-builtin: 'int'
-       | 'double'
-       | 'char'
+builtin returns [Type ast]:
+        I = 'int'       {$ast = new IntType($I.getLine(), $I.getCharPositionInLine()+1);}
+       | D = 'double'   {$ast = new DoubleType($D.getLine(), $D.getCharPositionInLine()+1);}
+       | C = 'char'     {$ast = new CharType($C.getLine(), $C.getCharPositionInLine()+1);}
        ;
 
 // returns void and receives no parameters.
