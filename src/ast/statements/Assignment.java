@@ -14,9 +14,6 @@ public class Assignment extends AbstractStatement {
 
     @Override
     public String toString() {
-        return "Assignment{" +
-                "expression1=" + expression1 +
-                ", expression2=" + expression2 +
-                '}';
+        return expression1 + "=" + expression2 ;
     }
 }

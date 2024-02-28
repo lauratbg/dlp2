@@ -4,20 +4,17 @@ public class Comparison extends AbstractExpression {
     private Expression expression1;
     private Expression expression2;
 
-    private String operand;
+    private String operator;
 
-    public Comparison(int line, int column, String operand, Expression expression1, Expression expression2) {
+    public Comparison(int line, int column, String operator, Expression expression1, Expression expression2) {
         super(line, column);
         this.expression1 = expression1;
         this.expression2 = expression2;
-        this.operand = operand;
+        this.operator = operator;
     }
 
     @Override
     public String toString() {
-        return "Comparison{" +
-                "expression1=" + expression1 +
-                ", expression2=" + expression2 +
-                '}';
+        return expression1 + " " + operator + " " + expression2;
     }
 }

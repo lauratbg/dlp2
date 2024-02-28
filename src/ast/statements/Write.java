@@ -16,8 +16,6 @@ public class Write extends AbstractStatement{
 
     @Override
     public String toString() {
-        return "Write{" +
-                ", expression=" + expression +
-                '}';
+        return "write " + expression;
     }
 }

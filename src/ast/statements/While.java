@@ -17,9 +17,6 @@ public class While extends AbstractStatement{
 
     @Override
     public String toString() {
-        return "While{" +
-                "statementList=" + statementList +
-                ", expression=" + expression +
-                '}';
+        return "while (" + expression + ")" + "{" + statementList + "}";
     }
 }

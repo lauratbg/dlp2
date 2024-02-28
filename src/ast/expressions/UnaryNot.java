@@ -10,8 +10,7 @@ public class UnaryNot extends  AbstractExpression{
 
     @Override
     public String toString() {
-        return "UnaryNot{" +
-                "expression=" + expression +
-                '}';
+        return  "!" + expression ;
+
     }
 }

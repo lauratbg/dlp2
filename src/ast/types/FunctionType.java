@@ -33,9 +33,6 @@ public class FunctionType extends AbstractType{
 
     @Override
     public String toString() {
-        return "FunctionType{" +
-                "type=" + type +
-                ", varDefinitionList=" + varDefinitionList +
-                '}';
+        return type + " " + varDefinitionList;
     }
 }

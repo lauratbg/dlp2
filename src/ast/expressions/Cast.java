@@ -18,6 +18,6 @@ public class Cast extends AbstractExpression {
 
     @Override
     public String toString() {
-        return "Cast{}";
+        return "(" + type+ ")" + " " + expression;
     }
 }

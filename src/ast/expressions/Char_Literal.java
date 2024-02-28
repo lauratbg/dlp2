@@ -9,6 +9,6 @@ public class Char_Literal extends AbstractExpression{
 
     @Override
     public String toString() {
-        return "Char_Literal{}";
+        return value + "";
     }
 }

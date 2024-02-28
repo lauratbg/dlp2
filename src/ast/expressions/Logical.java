@@ -14,9 +14,6 @@ public class Logical extends AbstractExpression{
 
     @Override
     public String toString() {
-        return "Logical{" +
-                "expression1=" + expression1 +
-                ", expression2=" + expression2 +
-                '}';
+        return expression1 + " " + operator + " " + expression2;
     }
 }

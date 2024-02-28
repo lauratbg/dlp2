@@ -10,6 +10,6 @@ public class IntType extends AbstractType {
 
     @Override
     public String toString() {
-        return "Int{}";
+        return "Int";
     }
 }

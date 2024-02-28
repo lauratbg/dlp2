@@ -26,7 +26,7 @@ void main() {
   } pair;
   // * Array
   int[10][5] vector;
-  
+
   i=0;
   j=0;
   while(i<10){
@@ -36,14 +36,14 @@ void main() {
     }
   i=i+1;
   }
-  
+
   i=0;
   pair.character = '0';
   pair.integer = 48;
   while (pair.integer >= i) {
     if (pair.integer == vector[0][0] || !(int)pair.character || i%2==0)
       write 't', 'r', 'u', 'e', '\n';
-    else 
+    else
       write 'f', 'a', 'l', 's', 'e', '\n';
     i=i+1;
   }

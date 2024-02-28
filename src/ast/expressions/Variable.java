@@ -10,8 +10,7 @@ public class Variable extends AbstractExpression{
 
     @Override
     public String toString() {
-        return "Variable{" +
-                "name='" + name + '\'' +
-                '}';
+        return  name + "";
+
     }
 }

@@ -10,8 +10,7 @@ public class UnaryMinus extends AbstractExpression{
 
     @Override
     public String toString() {
-        return "UnaryMinus{" +
-                "expression=" + expression +
-                '}';
+        return "-" + expression;
+
     }
 }

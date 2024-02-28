@@ -10,8 +10,6 @@ public class Int_Literal extends AbstractExpression{
 
     @Override
     public String toString() {
-        return "Int_Literal{" +
-                "value=" + value +
-                '}';
+        return value + "";
     }
 }

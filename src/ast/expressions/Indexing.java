@@ -12,9 +12,6 @@ public class Indexing extends AbstractExpression{
 
     @Override
     public String toString() {
-        return "Indexing{" +
-                "expression1=" + expression1 +
-                ", expression2=" + expression2 +
-                '}';
+        return  expression1 + " ["  + expression2 + "] " ;
     }
 }

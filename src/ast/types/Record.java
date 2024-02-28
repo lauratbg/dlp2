@@ -21,8 +21,6 @@ public class Record extends AbstractType{
 
     @Override
     public String toString() {
-        return "Record{" +
-                "recordFieldList=" + recordFieldList +
-                '}';
+        return "struct {" + recordFieldList + "}";
     }
 }

@@ -11,8 +11,7 @@ public class Real_Literal extends AbstractExpression{
 
     @Override
     public String toString() {
-        return "Real_Literal{" +
-                "value=" + value +
-                '}';
+        return value + "";
+
     }
 }

@@ -14,10 +14,6 @@ public class Arithmetic extends AbstractExpression{
 
     @Override
     public String toString() {
-        return "Arithmetic{" +
-                "operator='" + operator + '\'' +
-                ", expression1=" + expression1 +
-                ", expression2=" + expression2 +
-                '}';
+        return expression1 + " " + operator + " " + expression2;
     }
 }

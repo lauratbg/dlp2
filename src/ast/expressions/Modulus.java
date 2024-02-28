@@ -13,9 +13,6 @@ public class Modulus extends  AbstractExpression{
 
     @Override
     public String toString() {
-        return "Modulus{" +
-                "expression1=" + expression1 +
-                ", expression2=" + expression2 +
-                '}';
+        return expression1 + "%" + expression2;
     }
 }
