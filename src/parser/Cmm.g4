@@ -12,8 +12,8 @@ grammar Cmm;
 //A program is a sequence of variable and function definitions.
 program returns [Program ast]
         locals [List<Definition> list = new ArrayList<>()]:
-        (v = varDefinition {$list.addAll($v.ast);}| f = functionDefinition {$list.add($f.ast);})* m = main {$list.add($m.ast);}
-        {$ast = new Program($m.ast.getLine(), $m.ast.getColumn(), $list);}
+        (v = varDefinitions {$list.addAll($v.ast);}| f = functionDefinition {$list.add($f.ast);})* m = main {$list.add($m.ast);}
+        {$ast = new Program($m.ast.getLine(), $m.ast.getColumn(), $list);} EOF
         ;
 
 expression returns [Expression ast]:
@@ -32,10 +32,8 @@ expression returns [Expression ast]:
                 {$ast = new UnaryMinus($OP.getLine(), $OP.getCharPositionInLine()+1, $e.ast);}
             | OP = '!' e = expression
                 {$ast = new UnaryNot($OP.getLine(), $OP.getCharPositionInLine()+1, $e.ast);}
-            | e1 = expression ('%') e2 = expression
-                {$ast = new Arithmetic($e1.ast.getLine(), $e1.ast.getColumn(), $OP.text, $e1.ast, $e2.ast);}
-            | e1 = expression ('%') e2 = expression
-                {$ast = new Modulus($e1.ast.getLine(), $e1.ast.getColumn(), $e1.ast, $e2.ast);}
+            | e1 = expression OP = ('/' | '*' | '%') e2 = expression
+                {$ast = Arithmetic.createArithmetic($e1.ast.getLine(), $e1.ast.getColumn(), $OP.text, $e1.ast, $e2.ast);}
             | e1 = expression OP = ('+' | '-') e2 = expression
                 {$ast = new Arithmetic($e1.ast.getLine(), $e1.ast.getColumn(), $OP.text, $e1.ast, $e2.ast);}
             | e1 = expression OP = ('>' | '>=' | '<' | '<=' | '!=' | '==') e2 = expression
@@ -73,7 +71,7 @@ statement returns [List<Statement> ast = new ArrayList<>()]:
             | f = functionInvocation ';'
                  {$ast.add($f.ast);}
             | 'return' expression? ';'
-            | varDefinition
+            | varDefinitions
             ;
 
 // Array types can be created with the "[]" type constructor, following the Java syntax but specifying
@@ -86,10 +84,11 @@ type returns [Type ast]
         {$ast = Array.createArray($t.ast.getLine(), $t.ast.getColumn(), $t.ast, Integer.valueOf($IC.text));}
     | b = builtin
         {$ast = $b.ast;}
-    | S = 'struct' '{' ( {int i = 0;} v = varDefinition {
-      $list.add(
+    | S = 'struct' '{' ( {int i = 0;} v = varDefinitions
+      {$list.add(
         new RecordField($v.ast.get(i).getLine(), $v.ast.get(i).getColumn(), $v.ast.get(i).getType(), $v.ast.get(i).getName()));
-        i++;})* '}'
+        i++;})*
+        '}'
       {$ast = new ast.types.Record($S.getLine(), $S.getCharPositionInLine() + 1, $list);}
     ;
 
@@ -100,7 +99,7 @@ block returns [List<Statement> ast = new ArrayList<>()]:
 
 //type followed by a non-empty enumeration of comma-separated identifiers.
 // Variable definitions must end with the ";" character.
-varDefinition returns [List<VarDefinition> ast = new ArrayList<>()]:
+varDefinitions returns [List<VarDefinition> ast = new ArrayList<>()]:
              t = type ID1 = ID
                 {$ast.add(new VarDefinition($t.ast.getLine(), $t.ast.getColumn(), $t.ast, $ID1.text));}
                     (',' ID2 = ID {$ast.add(new VarDefinition($t.ast.getLine(), $t.ast.getColumn(), $t.ast, $ID2.text));})* ';'
@@ -111,18 +110,17 @@ varDefinition returns [List<VarDefinition> ast = new ArrayList<>()]:
 // Return types could be built-in or void.
 // The function body goes between { and }.
 functionDefinition returns [FuncDefinition ast]
-                   locals [List<VarDefinition> varDefinitions = new ArrayList<VarDefinition>()]:
-                   r=returnType id1=ID '(' (p=params {$varDefinitions.addAll($p.ast);})?')'
-                  '{' f=functionBody '}'
-                  {$ast = new FuncDefinition($r.ast.getLine(), $r.ast.getColumn(),
-                        new FunctionType($id1.getLine(), $id1.getCharPositionInLine()+1, $r.ast, $varDefinitions),
-                        $id1.text, $f.ast);}
-                  ;
-params returns [List<VarDefinition> ast = new ArrayList<VarDefinition>();]:
-     ((b1=builtin id1=ID) (',')
-        {$ast.add(new VarDefinition($b1.ast.getLine(), $b1.ast.getColumn(), $b1.ast, $id1.text));})*
-        (b2=builtin id2=ID){$ast.add(new VarDefinition($b2.ast.getLine(), $b2.ast.getColumn(),$b2.ast, $id2.text));}
-     ;
+                   locals [List<VarDefinition> list = new ArrayList<>()]:
+                   r = returnType ID1 = ID '(' (b1 = builtin ID2 = ID ','
+                        {$list.add(new VarDefinition($b1.ast.getLine(), $b1.ast.getColumn(), $b1.ast, $ID2.text));})*
+                         (b2 = builtin ID3 = ID
+                             {$list.add(new VarDefinition($b2.ast.getLine(), $b2.ast.getColumn(), $b2.ast, $ID3.text));})?
+                             ')' '{' f = functionBody '}'
+                                {$ast = new FuncDefinition($r.ast.getLine(), $r.ast.getColumn(),
+                                                        new FunctionType($ID1.getLine(), $ID1.getCharPositionInLine()+1, $r.ast, $list),
+                                                        $ID1.text, $f.ast);}
+                   ;
+
 returnType returns [Type ast]:
            b = builtin
                 {$ast = $b.ast;}
@@ -132,7 +130,7 @@ returnType returns [Type ast]:
 
 //sequences of variable definitions followed by sequences of statements. Both must end with the ";" character.
 functionBody returns [List<Statement> ast = new ArrayList<>()]:
-            (v = varDefinition {$ast.addAll($v.ast);})* (s = statement {$ast.addAll($s.ast);})*
+            (v = varDefinitions {$ast.addAll($v.ast);})* (s = statement {$ast.addAll($s.ast);})*
             ;
 
 functionInvocation returns [FunctionInvocation ast]
@@ -153,7 +151,7 @@ main returns [FuncDefinition ast]:
         V = 'void' M = 'main' '(' ')' '{' f = functionBody '}'
         {$ast = new FuncDefinition($V.getLine(), $V.getCharPositionInLine() + 1,
             new FunctionType($V.getLine(), $V.getCharPositionInLine() + 1,
-                new VoidType($V.getLine(), $V.getCharPositionInLine() + 1), new ArrayList<VarDefinition>()),
+                            new VoidType($V.getLine(), $V.getCharPositionInLine() + 1), new ArrayList<VarDefinition>()),
                  $M.text, $f.ast);}
     ;
 
