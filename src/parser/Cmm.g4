@@ -6,13 +6,16 @@ grammar Cmm;
     import ast.program.*;
     import ast.statements.*;
     import ast.types.*;
+    import ast.types.Record;
     import ast.types.builtin.*;
 }
 
-//A program is a sequence of variable and function definitions.
+// A program is a sequence of variable and function definitions.
+// EOF, there is nothing beyond main!!!
 program returns [Program ast]
         locals [List<Definition> list = new ArrayList<>()]:
-        (v = varDefinitions {$list.addAll($v.ast);}| f = functionDefinition {$list.add($f.ast);})* m = main {$list.add($m.ast);}
+        (v = varDefinitions {$list.addAll($v.ast);} | f = functionDefinition {$list.add($f.ast);})*
+            m = main {$list.add($m.ast);}
         {$ast = new Program($m.ast.getLine(), $m.ast.getColumn(), $list);} EOF
         ;
 
@@ -70,8 +73,8 @@ statement returns [List<Statement> ast = new ArrayList<>()]:
                  {$ast.add(new IfElse($I.getLine(), $I.getCharPositionInLine() + 1, $b1.ast, $b2.ast, $e.ast));}
             | f = functionInvocation ';'
                  {$ast.add($f.ast);}
-            | 'return' expression? ';'
-            | varDefinitions
+            | R = 'return' (e = expression
+                 {$ast.add(new Return($R.getLine(), $R.getCharPositionInLine() + 1, $e.ast));})? ';'
             ;
 
 // Array types can be created with the "[]" type constructor, following the Java syntax but specifying
@@ -89,7 +92,7 @@ type returns [Type ast]
         new RecordField($v.ast.get(i).getLine(), $v.ast.get(i).getColumn(), $v.ast.get(i).getType(), $v.ast.get(i).getName()));
         i++;})*
         '}'
-      {$ast = new ast.types.Record($S.getLine(), $S.getCharPositionInLine() + 1, $list);}
+      {$ast = new Record($S.getLine(), $S.getCharPositionInLine() + 1, $list);}
     ;
 
 block returns [List<Statement> ast = new ArrayList<>()]:
@@ -105,22 +108,26 @@ varDefinitions returns [List<VarDefinition> ast = new ArrayList<>()]:
                     (',' ID2 = ID {$ast.add(new VarDefinition($t.ast.getLine(), $t.ast.getColumn(), $t.ast, $ID2.text));})* ';'
              ;
 
-//return type, the function identifier and a list of comma-separated parameters between ( and ).
+// return type, the function identifier and a list of comma-separated parameters between ( and ).
 // Parameter types must be built-in (i.e., no arrays or records).
 // Return types could be built-in or void.
 // The function body goes between { and }.
 functionDefinition returns [FuncDefinition ast]
                    locals [List<VarDefinition> list = new ArrayList<>()]:
                    r = returnType ID1 = ID '(' (b1 = builtin ID2 = ID ','
+                        // adding the parameters if more than one
                         {$list.add(new VarDefinition($b1.ast.getLine(), $b1.ast.getColumn(), $b1.ast, $ID2.text));})*
+                        // adding a parameter if one or more
                          (b2 = builtin ID3 = ID
-                             {$list.add(new VarDefinition($b2.ast.getLine(), $b2.ast.getColumn(), $b2.ast, $ID3.text));})?
-                             ')' '{' f = functionBody '}'
+                             {$list.add(new VarDefinition($b2.ast.getLine(), $b2.ast.getColumn(), $b2.ast, $ID3.text));})? ')'
+                             '{' f = functionBody '}'
+                                // the parameters are passed by the Function type
                                 {$ast = new FuncDefinition($r.ast.getLine(), $r.ast.getColumn(),
-                                                        new FunctionType($ID1.getLine(), $ID1.getCharPositionInLine()+1, $r.ast, $list),
-                                                        $ID1.text, $f.ast);}
+                                            new FunctionType($ID1.getLine(), $ID1.getCharPositionInLine()+1, $r.ast, $list),
+                                        $ID1.text, $f.ast);}
                    ;
 
+// only void or builtin
 returnType returns [Type ast]:
            b = builtin
                 {$ast = $b.ast;}

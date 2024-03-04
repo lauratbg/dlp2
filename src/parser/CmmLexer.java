@@ -6,6 +6,7 @@ package parser;
     import ast.program.*;
     import ast.statements.*;
     import ast.types.*;
+    import ast.types.Record;
     import ast.types.builtin.*;
 
 import org.antlr.v4.runtime.Lexer;

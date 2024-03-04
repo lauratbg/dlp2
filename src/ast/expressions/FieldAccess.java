@@ -12,6 +12,6 @@ public class FieldAccess extends AbstractExpression {
 
     @Override
     public String toString() {
-        return field + ". " + expression ;
+        return expression + ". " + field ;
     }
 }
