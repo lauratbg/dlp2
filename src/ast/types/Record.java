@@ -19,10 +19,10 @@ public class Record extends AbstractType {
     private void checkErrors(List<RecordField> recordFieldList) {
 
         for (int i = 0; i < recordFieldList.size(); i++) {
-            for (int j = 1; j < recordFieldList.size(); j++) {
+            for (int j = i+1; j < recordFieldList.size(); j++) {
                 if (recordFieldList.get(i).equals(recordFieldList.get(j))) {
-                    ErrorHandler.getInstance().addError(new ErrorType(recordFieldList.get(i).getLine(),
-                            recordFieldList.get(i).getColumn(), "Duplicated names"));
+                    ErrorHandler.getInstance().addError(new ErrorType(recordFieldList.get(j).getLine(),
+                            recordFieldList.get(j).getColumn(), "Duplicated names in struct type"));
                 }
             }
         }

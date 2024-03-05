@@ -88,17 +88,14 @@ type returns [Type ast]
     | b = builtin
         {$ast = $b.ast;}
     | S = 'struct' '{' ( {int i = 0;} v = varDefinitions
-      {$list.add(
-        new RecordField($v.ast.get(i).getLine(), $v.ast.get(i).getColumn(), $v.ast.get(i).getType(), $v.ast.get(i).getName()));
-        i++;})*
-        '}'
+              {
+                for (VarDefinition varDef : $v.ast) {
+                    $list.add(new RecordField(varDef.getLine(), varDef.getColumn(), varDef.getType(), varDef.getName()));
+                }
+              })*
+      '}'
       {$ast = new Record($S.getLine(), $S.getCharPositionInLine() + 1, $list);}
     ;
-
-block returns [List<Statement> ast = new ArrayList<>()]:
-      '{' (s1 = statement {$ast.addAll($s1.ast);})* '}'
-      | s2 = statement {$ast.addAll($s2.ast);}
-      ;
 
 //type followed by a non-empty enumeration of comma-separated identifiers.
 // Variable definitions must end with the ";" character.
@@ -107,6 +104,13 @@ varDefinitions returns [List<VarDefinition> ast = new ArrayList<>()]:
                 {$ast.add(new VarDefinition($t.ast.getLine(), $t.ast.getColumn(), $t.ast, $ID1.text));}
                     (',' ID2 = ID {$ast.add(new VarDefinition($t.ast.getLine(), $t.ast.getColumn(), $t.ast, $ID2.text));})* ';'
              ;
+
+block returns [List<Statement> ast = new ArrayList<>()]:
+      '{' (s1 = statement {$ast.addAll($s1.ast);})* '}'
+      | s2 = statement {$ast.addAll($s2.ast);}
+      ;
+
+
 
 // return type, the function identifier and a list of comma-separated parameters between ( and ).
 // Parameter types must be built-in (i.e., no arrays or records).
@@ -143,7 +147,8 @@ functionBody returns [List<Statement> ast = new ArrayList<>()]:
 functionInvocation returns [FunctionInvocation ast]
                    locals [List<Expression> list = new ArrayList<Expression>()]:
             ID '(' ((e1 = expression ',' {$list.add($e1.ast);})* e2 = expression {$list.add($e2.ast);})? ')'
-           {$ast = new FunctionInvocation($ID.getLine(), $ID.getCharPositionInLine()+1, $ID.text, $list);}
+           {$ast = new FunctionInvocation($ID.getLine(), $ID.getCharPositionInLine()+1,
+                new Variable($ID.getLine(), $ID.getCharPositionInLine() + 1, $ID.text), $list);}
             ;
 
 //Built-in types are "int", "double" and "char".
