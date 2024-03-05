@@ -32,6 +32,11 @@ public class Array extends AbstractType{
      *   -> int
      * When we do things like before to do a 2D array, we get an array with the sizes
      * in inverse order, so this method is to solve that error reinverting the sizes
+     *
+     * It is necessary to do a factory bc if we create a 2D array or more using the
+     * constructor, this one is always  going to return the last created object
+     *
+     *
      * @param line
      * @param column
      * @param type
