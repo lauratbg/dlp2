@@ -16,13 +16,16 @@ public class Record extends AbstractType {
 
     }
 
+    /*
+    Checks that there is no repeated name of any record field in a struct
+     */
     private void checkErrors(List<RecordField> recordFieldList) {
-
         for (int i = 0; i < recordFieldList.size(); i++) {
             for (int j = i+1; j < recordFieldList.size(); j++) {
                 if (recordFieldList.get(i).equals(recordFieldList.get(j))) {
-                    ErrorHandler.getInstance().addError(new ErrorType(recordFieldList.get(j).getLine(),
-                            recordFieldList.get(j).getColumn(), "Duplicated names in struct type"));
+                    new ErrorType(recordFieldList.get(j).getLine(),
+                            recordFieldList.get(j).getColumn(),
+                                String.format("Duplicated names '%s' in struct type", recordFieldList.get(j).getName()));
                 }
             }
         }
