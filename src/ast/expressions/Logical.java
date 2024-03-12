@@ -1,5 +1,7 @@
 package ast.expressions;
 
+import semantic.Visitor;
+
 public class Logical extends AbstractExpression{
 
     private Expression expression1;
@@ -12,8 +14,37 @@ public class Logical extends AbstractExpression{
         this.operator = operator;
     }
 
+    public Expression getExpression1() {
+        return expression1;
+    }
+
+    public void setExpression1(Expression expression1) {
+        this.expression1 = expression1;
+    }
+
+    public Expression getExpression2() {
+        return expression2;
+    }
+
+    public void setExpression2(Expression expression2) {
+        this.expression2 = expression2;
+    }
+
+    public String getOperator() {
+        return operator;
+    }
+
+    public void setOperator(String operator) {
+        this.operator = operator;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
+    }
+
     @Override
     public String toString() {
-        return expression1 + " " + operator + " " + expression2;
+        return "(" + lvalue + ")" + expression1 + " " + operator + " " + expression2;
     }
 }

@@ -2,6 +2,7 @@ package ast.program;
 
 import ast.statements.Statement;
 import ast.types.Type;
+import semantic.Visitor;
 
 public class VarDefinition extends AbstractDefinition implements Statement {
 
@@ -13,6 +14,11 @@ public class VarDefinition extends AbstractDefinition implements Statement {
 
     public Type getType() {
         return type;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 
     @Override

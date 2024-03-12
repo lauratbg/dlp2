@@ -1,6 +1,7 @@
 package ast.types;
 
 import ast.program.VarDefinition;
+import semantic.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,11 @@ public class FunctionType extends AbstractType{
 
     public void setVarDefinitionList(List<VarDefinition> varDefinitionList) {
         this.varDefinitionList = varDefinitionList;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 
     @Override

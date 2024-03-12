@@ -5,6 +5,7 @@ import ast.expressions.AbstractExpression;
 import ast.expressions.Expression;
 import ast.statements.AbstractStatement;
 import ast.types.Type;
+import semantic.Visitor;
 
 public class Cast extends AbstractExpression {
     private Expression expression;
@@ -16,8 +17,29 @@ public class Cast extends AbstractExpression {
         this.type = type;
     }
 
+    public Expression getExpression() {
+        return expression;
+    }
+
+    public void setExpression(Expression expression) {
+        this.expression = expression;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
+    }
+
     @Override
     public String toString() {
-        return "(" + type+ ")" + " " + expression;
+        return "(" + lvalue + ")" + "(" + type+ ")" + " " + expression;
     }
 }

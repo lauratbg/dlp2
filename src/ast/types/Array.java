@@ -1,5 +1,7 @@
 package ast.types;
 
+import semantic.Visitor;
+
 public class Array extends AbstractType{
     private int size;
     private Type type;
@@ -55,6 +57,12 @@ public class Array extends AbstractType{
             res.type = createArray(line, column,((Array) type).type, oldSize); //calls again createArray passing type int and size 20
         }
         return res;
+    }
+
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 
     @Override

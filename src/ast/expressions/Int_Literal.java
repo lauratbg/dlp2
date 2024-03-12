@@ -1,5 +1,7 @@
 package ast.expressions;
 
+import semantic.Visitor;
+
 public class Int_Literal extends AbstractExpression{
     private int value;
 
@@ -9,7 +11,12 @@ public class Int_Literal extends AbstractExpression{
     }
 
     @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
+    }
+
+    @Override
     public String toString() {
-        return value + "";
+        return "(" + lvalue + ")" + value + "";
     }
 }

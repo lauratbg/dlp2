@@ -1,5 +1,7 @@
 package ast.expressions;
 
+import semantic.Visitor;
+
 public class Char_Literal extends AbstractExpression{
     public char value;
     public Char_Literal(int line, int column, char value) {
@@ -8,7 +10,13 @@ public class Char_Literal extends AbstractExpression{
     }
 
     @Override
-    public String toString() {
-        return value + "";
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
+
+    @Override
+    public String toString() {
+        return "(" + lvalue + ")" + value + "";
+    }
+
 }

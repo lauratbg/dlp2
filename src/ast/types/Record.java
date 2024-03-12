@@ -1,6 +1,7 @@
 package ast.types;
 
 import errorhandler.ErrorHandler;
+import semantic.Visitor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +38,11 @@ public class Record extends AbstractType {
 
     public void setRecordFieldList(List<RecordField> recordFieldList) {
         this.recordFieldList = recordFieldList;
+    }
+
+    @Override
+    public <TP, TR> TR accept(Visitor<TP, TR> visitor, TP param) {
+        return visitor.visit(this, param);
     }
 
     @Override
