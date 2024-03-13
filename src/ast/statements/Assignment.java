@@ -15,7 +15,6 @@ public class Assignment extends AbstractStatement {
         super(line, column);
         this.expression1 = expression1;
         this.expression2 = expression2;
-
     }
 
     public Expression getExpression1() {

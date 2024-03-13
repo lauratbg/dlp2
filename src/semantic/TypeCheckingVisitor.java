@@ -137,7 +137,6 @@ public class TypeCheckingVisitor implements Visitor<Void, Void>{
 
     //  Statements
 
-    //TODO:
     @Override
     public Void visit(Assignment assignment, Void param) {
         assignment.getExpression1().accept(this, param);
@@ -172,6 +171,9 @@ public class TypeCheckingVisitor implements Visitor<Void, Void>{
     @Override
     public Void visit(Read read, Void param) {
         read.getExpression().accept(this, param);
+        if(!read.getExpression().getLvalue())
+            new ErrorType(read.getExpression().getLine(), read.getExpression().getColumn(),
+                    "The lvalue expression of the read must be true");
         return null;
     }
 
