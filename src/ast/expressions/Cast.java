@@ -1,20 +1,17 @@
 package ast.expressions;
 
 
-import ast.expressions.AbstractExpression;
-import ast.expressions.Expression;
-import ast.statements.AbstractStatement;
 import ast.types.Type;
 import semantic.Visitor;
 
 public class Cast extends AbstractExpression {
     private Expression expression;
-    private Type type;
+    private Type castType;
 
-    public Cast(int line, int column, Type type, Expression expression) {
+    public Cast(int line, int column, Type castType, Expression expression) {
         super(line, column);
         this.expression = expression;
-        this.type = type;
+        this.castType = castType;
     }
 
     public Expression getExpression() {
@@ -25,12 +22,12 @@ public class Cast extends AbstractExpression {
         this.expression = expression;
     }
 
-    public Type getType() {
-        return type;
+    public Type getCastType() {
+        return castType;
     }
 
-    public void setType(Type type) {
-        this.type = type;
+    public void setCastType(Type castType) {
+        this.castType = castType;
     }
 
     @Override
@@ -40,6 +37,6 @@ public class Cast extends AbstractExpression {
 
     @Override
     public String toString() {
-        return "(" + lvalue + ")" + "(" + type+ ")" + " " + expression;
+        return "(" + lvalue + ")" + "(" + castType + ")" + " " + expression;
     }
 }
