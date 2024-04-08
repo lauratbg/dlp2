@@ -8,6 +8,7 @@ import ast.types.builtin.CharType;
 import ast.types.builtin.DoubleType;
 import ast.types.builtin.IntType;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -197,11 +198,11 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
      */
     @Override
     public Void visit(FunctionInvocation functionInvocation, Void param) {
-        functionInvocation.getFunctionName().accept(this, param);
         for (int i = 0; i < functionInvocation.getParams().size(); i++)
             functionInvocation.getParams().get(i).accept(this, param);
+        functionInvocation.getFunctionName().accept(this, param);
         functionInvocation.setLvalue(false);
-        functionInvocation.setType(functionInvocation.getType().parenthesis(functionInvocation.getLine(), functionInvocation.getColumn(), functionInvocation.getParams().stream().map(Expression::getType).collect(Collectors.toList())));
+        functionInvocation.setType(functionInvocation.getFunctionName().getType().parenthesis(functionInvocation.getLine(), functionInvocation.getColumn(), functionInvocation.getParams().stream().map(Expression::getType).collect(Collectors.toList())));
         return null;
     }
 
@@ -214,7 +215,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
         super.visit(assignment, null);
         if (!assignment.getExpression1().getLvalue())
             new ErrorType(assignment.getExpression1().getLine(), assignment.getExpression1().getColumn(),
-                    "The lvalue in the assignment must be true");
+                    "The lvalue in the assignment  must be true");
         assignment.getExpression1().getType().assignTo(assignment.getExpression2().getType());
         return null;
     }
@@ -226,8 +227,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public Void visit(Read read, Void param) {
         read.getExpression().accept(this, null);
-            new ErrorType(read.getExpression().getLine(), read.getExpression().getColumn(),
-                    "The lvalue expression of the read must be true");
+//            new ErrorType(read.getExpression().getLine(), read.getExpression().getColumn(),
+//                    "The lvalue expression of the read must be true");
         read.getExpression().getType().mustBeReadable(read.getLine(), read.getColumn());
         return null;
     }
