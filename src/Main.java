@@ -27,7 +27,7 @@ public class Main {
         Program ast = parser.program().ast;
         Visitor<Void, Void> typeCheckingVisitor = new TypeCheckingVisitor();
         typeCheckingVisitor.visit(ast, null);
-
+//
         Visitor<Void, Void> identificationVisitor= new IdentificationVisitor();
         identificationVisitor.visit(ast, null);
 

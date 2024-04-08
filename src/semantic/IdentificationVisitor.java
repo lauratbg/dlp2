@@ -15,10 +15,10 @@ public class IdentificationVisitor extends AbstractVisitor<Void, Void> {
     public Void visit(Variable variable, Void param) {
         Definition definition = st.find(variable.getName());
         // If there is no variable with the same name
-        if (definition != null)
+//        if (definition != null)
             variable.setDefinition(definition);
-        else
-            new ErrorType(variable.getLine(), variable.getColumn(), "The variable '" + variable.getName() + "' is NOT defined");
+//        else
+//            new ErrorType(variable.getLine(), variable.getColumn(), "The variable '" + variable.getName() + "' is NOT defined");
         return null;
     }
 

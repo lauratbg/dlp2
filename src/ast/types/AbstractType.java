@@ -55,8 +55,8 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     }
 
     @Override
-    public Type assignTo(Type type) {
-        return new ErrorType(type.getLine(), type.getColumn(), "Type '" + this + "' can NOT be assigned to '" + type + "'");
+    public void assignTo(Type type) {
+         new ErrorType(type.getLine(), type.getColumn(), "Type '" + this + "' can NOT be assigned to '" + type + "'");
     }
 
     @Override
@@ -75,8 +75,8 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     }
 
     @Override
-    public Type returnAs(int line, int column, Type type) {
-        return new ErrorType(line, column, "The return type '" + this +"' is NOT correct");
+    public void returnAs(int line, int column, Type type) {
+         new ErrorType(line, column, "The return type '" + this +"' is NOT correct");
     }
 
     @Override
@@ -87,6 +87,11 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     @Override
     public boolean isAssignable(Type type) {
         return false;
+    }
+
+    @Override
+    public Type squareBrackets(Type type) {
+        return new ErrorType(type.getLine(), type.getColumn(), "Indexing with '" + this +"' is NOT correct");
     }
 
 

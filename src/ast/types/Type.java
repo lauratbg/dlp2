@@ -22,7 +22,7 @@ public interface Type extends ASTNode {
 
     Type minus(int line, int column);
 
-    Type assignTo(Type type);
+    void assignTo(Type type);
 
     Type mustBeReadable(int line, int column);
 
@@ -30,8 +30,10 @@ public interface Type extends ASTNode {
 
     Type mustBeBoolean(int line, int column);
 
-    Type returnAs(int line, int column, Type type);
+    void returnAs(int line, int column, Type type);
 
     Type parenthesis(int line, int column, List<Type> collect);
     boolean isAssignable(Type type);
+
+    Type squareBrackets(Type type);
 }

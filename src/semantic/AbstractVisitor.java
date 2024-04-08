@@ -117,9 +117,9 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR>{
     public TR visit(Assignment assignment, TP param) {
         assignment.getExpression1().accept(this, param);
         assignment.getExpression2().accept(this, param);
-        if(!assignment.getExpression1().getLvalue())
-            new ErrorType(assignment.getExpression1().getLine(), assignment.getExpression1().getColumn(),
-                    "The left-hand side lvalue expression must be true");
+//        if(!assignment.getExpression1().getLvalue())
+//            new ErrorType(assignment.getExpression1().getLine(), assignment.getExpression1().getColumn(),
+//                    "The left-hand side lvalue expression must be true");
         return null;
     }
 
@@ -168,9 +168,9 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR>{
     @Override
     public TR visit(Write write, TP param) {
         write.getExpression().accept(this, param);
-        if(!write.getExpression().getLvalue())
-            new ErrorType(write.getLine(), write.getColumn(),
-                    "The lvalue expression of the write must be true");
+//        if(!write.getExpression().getLvalue())
+//            new ErrorType(write.getLine(), write.getColumn(),
+//                    "The lvalue expression of the write must be true");
         return null;
     }
 

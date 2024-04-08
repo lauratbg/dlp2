@@ -1,5 +1,7 @@
 package ast.types;
 
+import ast.expressions.Indexing;
+import ast.types.builtin.IntType;
 import semantic.Visitor;
 
 public class Array extends AbstractType{
@@ -68,5 +70,26 @@ public class Array extends AbstractType{
     @Override
     public String toString() {
         return type + "[" + size + "]";
+    }
+
+    @Override
+    public Type squareBrackets(Type t){
+        if(t instanceof IntType)
+            return this.getType();
+        if(t instanceof ErrorType)
+            return t;
+        return new ErrorType(t.getLine(), t.getColumn(),
+                "[Error] The index of the array is NOT an integer");
+    }
+
+    @Override
+    public void assignTo(Type type) {
+        if (type instanceof Array)
+            return;
+        if (type instanceof ErrorType)
+            return;
+        new ErrorType(type.getLine(), type.getColumn(), String.format(
+                "Cannot assign type %s to type %s.", type, this
+        ));
     }
 }

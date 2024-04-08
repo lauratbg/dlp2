@@ -21,5 +21,60 @@ public class CharType extends AbstractType {
     public String toString() {
         return "Char";
     }
+    @Override
+    public boolean isAssignable(Type type) {
+        return (type instanceof IntType || type instanceof ErrorType
+                || type instanceof CharType || type instanceof DoubleType);
+    }
 
+    @Override
+    public void assignTo(Type t) {
+        if (t instanceof CharType)
+            return;
+        if (t instanceof ErrorType)
+            return;
+        new ErrorType(t.getLine(), t.getColumn(),
+                "[Error] [" + t + "] can NOT be assigned to type [" + this + "]"
+        );
+    }
+
+    @Override
+    public Type mustBeReadable(int line, int column) {
+        return this;
+    }
+
+    @Override
+    public Type mustBeWritable(int line, int column) {
+        return this;
+    }
+
+    @Override
+    public Type castTo(Type t) {
+        if(!this.isAssignable(t))
+            super.castTo(t);
+        return t;
+    }
+
+    @Override
+    public void returnAs(int line, int column, Type t) {
+        if (t instanceof CharType) return;
+        if (t instanceof ErrorType) return;
+
+        new ErrorType(line, column, "[Error] The return is returning [" + t +"] instead of [" +
+                this + "]");
+    }
+
+    @Override
+    public Type modulus(Type type) {
+        if (type instanceof CharType || type instanceof ErrorType)
+            return new IntType(type.getLine(), type.getColumn());
+        return super.modulus(type);
+    }
+
+    @Override
+    public Type arithmetic(Type type) {
+        if (type instanceof CharType || type instanceof ErrorType)
+            return new IntType(type.getLine(), type.getColumn());
+        return super.modulus(type);
+    }
 }

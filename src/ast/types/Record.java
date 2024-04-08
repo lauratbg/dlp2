@@ -49,4 +49,15 @@ public class Record extends AbstractType {
     public String toString() {
         return "struct {" + recordFieldList + "}";
     }
+
+    @Override
+    public Type dot(int line, int column,String t){
+        for(RecordField rf: getRecordFieldList()) {
+            if (rf.getName().equals(t)){
+                return rf.getType();
+            }
+        }
+        return new ErrorType(line, column,
+                "[Error] The field [" + t + "] was not found");
+    }
 }

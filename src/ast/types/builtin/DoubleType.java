@@ -21,5 +21,79 @@ public class DoubleType extends AbstractType {
     public String toString() {
         return "Double";
     }
+    @Override
+    public boolean isAssignable(Type type) {
+        return (type instanceof DoubleType || type instanceof ErrorType);
+    }
+    @Override
+    public void assignTo(Type t) {
+        if (t instanceof DoubleType)
+            return;
+        if (t instanceof ErrorType)
+            return;
+        new ErrorType(t.getLine(), t.getColumn(),
+                "[Error] [" + t + "] can NOT be assigned to type [" + this + "]"
+        );
+    }
+    @Override
+    public Type arithmetic(Type t) {
+        if(!this.isAssignable(t))
+            return super.arithmetic(t);
+        return t;
+    }
 
+    @Override
+    public Type mustBeReadable(int line, int column) {
+        return this;
+    }
+
+    @Override
+    public Type mustBeWritable(int line, int column) {
+        return this;
+    }
+
+    @Override
+    public Type castTo(Type t) {
+        if (t instanceof IntType || t instanceof DoubleType || t instanceof CharType || t instanceof ErrorType)
+            return t;
+        return super.castTo(t);
+    }
+
+    //double and int
+    @Override
+    public Type comparison(Type t) {
+        if(t instanceof ErrorType)
+            return t;
+        if(t instanceof DoubleType)
+            return new IntType(t.getLine(), t.getColumn());
+        return super.comparison(t);
+    }
+
+    @Override
+    public Type logical(Type t) {
+        if(!this.isAssignable(t))
+            return super.logical(t);
+        return t;
+    }
+
+    @Override
+    public Type modulus(Type t) {
+        if(!this.isAssignable(t))
+            return super.modulus(t);
+        return t;
+    }
+
+    @Override
+    public Type minus(int line, int column) {
+        return this;
+    }
+
+    @Override
+    public void returnAs (int line, int column, Type t) {
+        if (t instanceof DoubleType) return;
+        if (t instanceof ErrorType) return;
+
+        new ErrorType(line, column, "[Error] The return is returning [" + t +"] instead of [" +
+                this + "]");
+    }
 }

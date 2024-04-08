@@ -23,7 +23,7 @@ public abstract class AbstractExpression extends AbstractASTNode implements Expr
 
     @Override
     public Type getType() {
-        System.out.println(type);
+//        System.out.println(type);
         return type;
     }
 
