@@ -1,6 +1,9 @@
 package ast.types.builtin;
 
 import ast.types.AbstractType;
+import ast.types.ErrorType;
+import ast.types.Type;
+import com.sun.jdi.IntegerType;
 import semantic.Visitor;
 
 public class DoubleType extends AbstractType {
@@ -18,4 +21,5 @@ public class DoubleType extends AbstractType {
     public String toString() {
         return "Double";
     }
+
 }

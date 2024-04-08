@@ -35,6 +35,6 @@ public class FieldAccess extends AbstractExpression {
 
     @Override
     public String toString() {
-        return "(" + lvalue + ")" + expression + ". " + field ;
+        return "(" + getLvalue() + ")" + expression + ". " + field ;
     }
 }

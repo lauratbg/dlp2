@@ -1,9 +1,11 @@
 package ast.expressions;
 
 import ast.AbstractASTNode;
+import ast.types.Type;
 
 public abstract class AbstractExpression extends AbstractASTNode implements Expression {
-    public boolean lvalue;
+    private boolean lvalue;
+    private Type type;
 
     public AbstractExpression(int line, int column) {
         super(line, column);
@@ -19,4 +21,14 @@ public abstract class AbstractExpression extends AbstractASTNode implements Expr
         this.lvalue = lvalue;
     }
 
+    @Override
+    public Type getType() {
+        System.out.println(type);
+        return type;
+    }
+
+    @Override
+    public void setType(Type type) {
+        this.type = type;
+    }
 }

@@ -17,12 +17,16 @@ public class IfElse extends AbstractStatement{
         this.ifList = new ArrayList<>(ifList);
         this.elseList = new ArrayList<>(elseList);
         this.expression = expression;
+
     }
 
     public IfElse(int line, int column, List<Statement> ifList, Expression expression) {
         super(line, column);
         this.ifList = new ArrayList<>(ifList);
+        this.elseList = new ArrayList<>();
+
         this.expression = expression;
+
     }
 
     public List<Statement> getIfList() {

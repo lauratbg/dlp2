@@ -17,6 +17,6 @@ public class Int_Literal extends AbstractExpression{
 
     @Override
     public String toString() {
-        return "(" + lvalue + ")" + value + "";
+        return "(" + getLvalue() + ")" + value + "";
     }
 }

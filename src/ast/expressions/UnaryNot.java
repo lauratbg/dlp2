@@ -25,7 +25,7 @@ public class UnaryNot extends  AbstractExpression{
 
     @Override
     public String toString() {
-        return  "(" + lvalue + ")" + "!" + expression ;
+        return  "(" + getLvalue() + ")" + "!" + expression ;
 
     }
 }

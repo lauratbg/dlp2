@@ -37,6 +37,6 @@ public class Cast extends AbstractExpression {
 
     @Override
     public String toString() {
-        return "(" + lvalue + ")" + "(" + castType + ")" + " " + expression;
+        return "(" + getLvalue() + ")" + "(" + castType + ")" + " " + expression;
     }
 }

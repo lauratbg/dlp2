@@ -46,7 +46,7 @@ public class Comparison extends AbstractExpression {
 
     @Override
     public String toString() {
-        return "(" + lvalue + ")" + expression1 + " " + operator + " " + expression2;
+        return "(" + getLvalue() + ")" + expression1 + " " + operator + " " + expression2;
     }
 
 

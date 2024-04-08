@@ -1,43 +1,20 @@
 package semantic;
 
 import ast.expressions.*;
+import ast.program.FuncDefinition;
 import ast.statements.*;
 import ast.types.*;
+import ast.types.builtin.CharType;
+import ast.types.builtin.DoubleType;
+import ast.types.builtin.IntType;
+
+import java.util.stream.Collectors;
 
 
 public class TypeCheckingVisitor extends AbstractVisitor<Void, Void>{
 
     /*
         ****** EXPRESSIONS ******
-        P: Arithmetic: exp1 -> exp2 exp3
-        R: exp1.type = exp2.type.arithmetic(exp3.type)
-
-        P: Modulus: exp1 -> exp2 exp3
-        R: exp1.type = exp2.type.modulus(exp3.type)
-
-        P: Logical: exp1 -> exp2 exp3
-        R: exp1.type = exp2.type.logical(exp3.type)
-
-        P: UnaryNot: exp1 -> exp2
-        R: exp1.type = exp2.type.logical()
-
-        P: Comparison: exp1 -> exp2 exp3
-        R: exp1.type = exp2.type.comparison(exp3.type)
-
-        P: UnaryMinus: exp1 -> exp2
-        R: exp1.type = exp2.type.minus()
-
-        P: Cast: exp1 -> type exp2
-        R: exp1.type = exp2.type.castTo(type)
-
-        P: Indexing: exp1 -> exp2 exp3
-        R: exp1.type = exp2.type.squareBrackets(exp3.type)
-
-                                            f(3.4 + a, b)
-                                            exp1.type refers to the whole thing f(3.4 + a, b)
-                                            exp2.type refers to f
-                                            those types are NOT the same
-                                            exp*.type are the type of the arguments
 
         P: FunctionInvocation: exp1 -> exp2 exp*
         R: exp1.type -> exp2.type.parenthesis(exp*.stream().map(exp -> exp.type).toArray())
@@ -45,75 +22,58 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void>{
         P: FunctionInvocation: stmt -> exp exp*
         R: exp.type.parenthesis(exp*.stream().map(exp -> exp.type).toArray())
 
-        P: FieldAccess: exp1 -> exp2 ID
-        R: exp1.type = exp2.type.dot(ID)
 
-        P: Variable: exp -> ID
-        R: exp.type = exp.def.type
-
-        P: Int_Literal: exp -> INT
-        R: exp.type = new IntegerType()
-
-        P: Char_Literal: exp -> CHAR
-        R: exp.type = new CharType()
-
-        P: Real_Literal: exp -> REAL
-        R: exp.type = new RealType()
-
-
-
-
-        ****** STATEMENTS ******
-        P: Assignment: stmt -> exp1 exp2
-        R: exp2.type.assignTo(exp1.type)
-
-        P: Read: stmt -> exp
-        R: exp.type.mustBeReadable()
-
-        P: Write: stmt -> exp
-        R: exp.type.mustBeWritable()
-
-        P: WhileStmt: stmt1 -> expression stmt2*
-        R: exp.type.mustBeBoolean()
-
-        P: IfElse: stmt1 -> expression stmt2*
-        R: exp.type.mustBeBoolean()
-
-        P: Ret: stmt -> exp
-        R: exp.type.returnAs(stmt.returnType)
-        //TODO: here it must be infered? Idk i did not get it well
-        stmt.type will be the return type of the function, get from functionType
      */
 
     @Override
     public Void visit(Arithmetic arith, Void param) {
         arith.setLvalue(false);
-
+        arith.setType(arith.getExpression1().getType().arithmetic(arith.getExpression2().getType()));
         return null;
     }
 
     // lvalue false bc the return is something temporary
+    /*
+        P: Cast: exp1 -> type exp2
+        R: exp1.type = exp2.type.castTo(type)
+     */
     @Override
     public Void visit(Cast cast, Void param) {
         cast.setLvalue(false);
+        cast.setType(cast.getExpression().getType().castTo(cast.getCastType()));
         return null;
     }
 
+    /*
+        P: Char_Literal: exp -> CHAR
+        R: exp.type = new CharType()
+     */
     @Override
     public Void visit(Char_Literal charLiteral, Void param) {
         charLiteral.setLvalue(false);
+        charLiteral.setType(new CharType(charLiteral.getLine(), charLiteral.getColumn()));
         return null;
     }
 
+    /*
+        P: Comparison: exp1 -> exp2 exp3
+        R: exp1.type = exp2.type.comparison(exp3.type)
+     */
     @Override
     public Void visit(Comparison comparison, Void param) {
         comparison.setLvalue(false);
+        comparison.setType(comparison.getExpression1().getType().comparison(comparison.getExpression2().getType()));
         return null;
     }
 
+    /*
+        P: FieldAccess: exp1 -> exp2 ID
+        R: exp1.type = exp2.type.dot(ID)
+     */
     @Override
     public Void visit(FieldAccess fieldAccess, Void param) {
         fieldAccess.setLvalue(true);
+        fieldAccess.setType(fieldAccess.getExpression().getType().dot(fieldAccess.getLine(), fieldAccess.getColumn(), fieldAccess.getField()));
         return null;
     }
 
@@ -127,49 +87,84 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void>{
         return null;
     }
 
+    /*
+        P: Int_Literal: exp -> INT
+        R: exp.type = new IntegerType()
+     */
     @Override
     public Void visit(Int_Literal intLiteral, Void param) {
         intLiteral.setLvalue(false);
+        intLiteral.setType(new IntType(intLiteral.getLine(), intLiteral.getColumn()));
         return null;
     }
 
+    /*
+        P: Logical: exp1 -> exp2 exp3
+        R: exp1.type = exp2.type.logical(exp3.type)
+     */
     @Override
     public Void visit(Logical logical, Void param) {
+        super.visit(logical, null);
         logical.setLvalue(false);
+        logical.setType(logical.getExpression1().getType().logical(logical.getExpression2().getType()));
         return null;
     }
 
+    /*
+        P: Modulus: exp1 -> exp2 exp3
+        R: exp1.type = exp2.type.modulus(exp3.type)
+     */
     @Override
     public Void visit(Modulus modulus, Void param) {
         modulus.setLvalue(false);
+        modulus.setType(modulus.getExpression1().getType().modulus(modulus.getExpression2().getType()));
         return null;
     }
 
+    /*
+        P: Real_Literal: exp -> REAL
+        R: exp.type = new RealType()
+     */
     @Override
     public Void visit(Real_Literal realLiteral, Void param) {
         realLiteral.setLvalue(false);
+        realLiteral.setType(new DoubleType(realLiteral.getLine(), realLiteral.getColumn()));
         return null;
     }
 
+    /*
+        P: UnaryMinus: exp1 -> exp2
+        R: exp1.type = exp2.type.minus()
+     */
     @Override
     public Void visit(UnaryMinus unaryMinus, Void param) {
         unaryMinus.setLvalue(false);
+        unaryMinus.setType(unaryMinus.getType().minus(unaryMinus.getLine(), unaryMinus.getColumn()));
         return null;
     }
 
+    /*
+        P: UnaryNot: exp1 -> exp2
+        R: exp1.type = exp2.type.logical()
+     */
     @Override
     public Void visit(UnaryNot unaryNot, Void param) {
         unaryNot.setLvalue(false);
+        unaryNot.setType(unaryNot.getExpression().getType().logical(unaryNot.getLine(), unaryNot.getColumn()));
         return null;
     }
 
+
+    /*
+        P: Variable: exp -> ID
+        R: exp.type = exp.def.type
+     */
     @Override
     public Void visit(Variable variable, Void param) {
         variable.setLvalue(true);
+        variable.setType(variable.getDefinition().getType());
         return null;
     }
-
-
 
     //  Statements
     /*
@@ -182,9 +177,83 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void>{
     @Override
     public Void visit(FunctionInvocation functionInvocation, Void param) {
         functionInvocation.setLvalue(false);
+        functionInvocation.setType(functionInvocation.getType().parenthesis(functionInvocation.getLine(), functionInvocation.getColumn(),functionInvocation.getParams().stream().map(Expression::getType).collect(Collectors.toList())));
         return null;
     }
 
+    /*
+        P: Assignment: stmt -> exp1 exp2
+        R: exp2.type.assignTo(exp1.type)
+     */
+    @Override
+    public Void visit(Assignment assignment, Void param) {
+        assignment.getExpression1().getType().assignTo(assignment.getExpression2().getType());
+        return null;
+    }
 
+    /*
+        P: Read: stmt -> exp
+        R: exp.type.mustBeReadable()
+     */
+    @Override
+    public Void visit(Read read, Void param) {
+        read.getExpression().accept(this, null);
+        if(!read.getExpression().getLvalue())
+            new ErrorType(read.getExpression().getLine(), read.getExpression().getColumn(),
+                    "The lvalue expression of the read must be true");
+        read.getExpression().getType().mustBeReadable(read.getLine(), read.getColumn());
+        return null;
+    }
+
+    /*
+        P: Write: stmt -> exp
+        R: exp.type.mustBeWritable()
+     */
+    @Override
+    public Void visit(Write write, Void param) {
+        write.getExpression().getType().mustBeWritable(write.getLine(), write.getColumn());
+        return null;
+    }
+
+    /*
+        P: WhileStmt: stmt1 -> expression stmt2*
+        R: exp.type.mustBeBoolean()
+     */
+    @Override
+    public Void visit(While wh, Void param) {
+        super.visit(wh, null);
+        wh.getExpression().getType().mustBeBoolean(wh.getLine(), wh.getColumn());
+        return null;
+    }
+
+    /*
+        P: IfElse: stmt1 -> expression stmt2*
+        R: exp.type.mustBeBoolean()
+     */
+    @Override
+    public Void visit(IfElse ifElse, Void param) {
+        ifElse.getExpression().getType().mustBeBoolean(ifElse.getLine(), ifElse.getColumn());
+        return null;
+    }
+
+    /*
+        P: Ret: stmt -> exp
+        R: exp.type.returnAs(stmt.returnType)
+        stmt.type will be the return type of the function, get from functionType
+     */
+    @Override
+    public Void visit(Return ret, Void param) {
+        ret.getExpression().getType().returnAs(ret.getLine(), ret.getColumn(), ret.getExpression().getType());
+        return null;
+    }
+
+    /*
+        P: FunctionDefinition: def -> type ID varDef* stmt
+        R: stmt*.returnType = type.returnType
+     */
+    @Override
+    public Void visit(FuncDefinition funcDefinition, Void param) {
+        return null;
+    }
 
 }

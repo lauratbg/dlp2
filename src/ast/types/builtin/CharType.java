@@ -1,6 +1,9 @@
 package ast.types.builtin;
 
 import ast.types.AbstractType;
+import ast.types.ErrorType;
+import ast.types.Type;
+import com.sun.jdi.IntegerType;
 import semantic.Visitor;
 
 public class CharType extends AbstractType {
@@ -18,4 +21,5 @@ public class CharType extends AbstractType {
     public String toString() {
         return "Char";
     }
+
 }

@@ -35,6 +35,6 @@ public class Indexing extends AbstractExpression{
 
     @Override
     public String toString() {
-        return "(" + lvalue + ")" + expression1 + " ["  + expression2 + "] " ;
+        return "(" + getLvalue() + ")" + expression1 + " ["  + expression2 + "] " ;
     }
 }

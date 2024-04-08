@@ -4,6 +4,8 @@ package ast.types;
 import errorhandler.ErrorHandler;
 import semantic.Visitor;
 
+import java.util.List;
+
 public class ErrorType extends AbstractType{
 
     private String message;
@@ -29,4 +31,5 @@ public class ErrorType extends AbstractType{
     public String toString() {
         return "[ERROR] line: " + getLine() + ", column: " + getColumn() + " -> " + message;
     }
+
 }

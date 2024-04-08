@@ -135,9 +135,10 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR>{
     @Override
     public TR visit(IfElse ifElse, TP param) {
         ifElse.getExpression().accept(this, param);
+
         for(int i = 0; i < ifElse.getIfList().size(); i++)
             ifElse.getIfList().get(i).accept(this, param);
-        if(!ifElse.getElseList().isEmpty())
+        if(ifElse.getElseList() != null || !ifElse.getElseList().isEmpty() )
             for(int i = 0; i < ifElse.getElseList().size(); i++)
                 ifElse.getElseList().get(i).accept(this, param);
         return null;
@@ -146,9 +147,7 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR>{
     @Override
     public TR visit(Read read, TP param) {
         read.getExpression().accept(this, param);
-        if(!read.getExpression().getLvalue())
-            new ErrorType(read.getExpression().getLine(), read.getExpression().getColumn(),
-                    "The lvalue expression of the read must be true");
+
         return null;
     }
 
@@ -169,6 +168,9 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR>{
     @Override
     public TR visit(Write write, TP param) {
         write.getExpression().accept(this, param);
+        if(!write.getExpression().getLvalue())
+            new ErrorType(write.getLine(), write.getColumn(),
+                    "The lvalue expression of the write must be true");
         return null;
     }
 

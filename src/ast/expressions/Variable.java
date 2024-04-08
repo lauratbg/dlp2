@@ -36,7 +36,7 @@ public class Variable extends AbstractExpression{
 
     @Override
     public String toString() {
-        return  "(" + lvalue + ")" + name + "";
+        return  "(" + getLvalue() + ")" + name + "";
     }
 
 

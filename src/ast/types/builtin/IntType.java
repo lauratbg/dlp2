@@ -1,6 +1,8 @@
 package ast.types.builtin;
 
 import ast.types.AbstractType;
+import ast.types.ErrorType;
+import ast.types.Type;
 import semantic.Visitor;
 
 public class IntType extends AbstractType {
@@ -18,4 +20,6 @@ public class IntType extends AbstractType {
     public String toString() {
         return "Int";
     }
+
+
 }

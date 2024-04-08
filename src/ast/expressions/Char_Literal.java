@@ -1,5 +1,8 @@
 package ast.expressions;
 
+import ast.types.ErrorType;
+import ast.types.Type;
+import ast.types.builtin.CharType;
 import semantic.Visitor;
 
 public class Char_Literal extends AbstractExpression{
@@ -16,7 +19,9 @@ public class Char_Literal extends AbstractExpression{
 
     @Override
     public String toString() {
-        return "(" + lvalue + ")" + value + "";
+        return "(" + getLvalue() + ")" + value + "";
     }
+
+
 
 }
