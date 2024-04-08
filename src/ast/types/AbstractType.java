@@ -36,7 +36,7 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
     @Override
     public Type logical(Type type) {
-        return new ErrorType(type.getLine(), type.getColumn(), "Type '" + this + "' can NOT be logical to '" + type + "'");
+        return new ErrorType(type.getLine(), type.getColumn(), "Type '" + this + "' and'" + type + "' can NOT be used together in logical operations");
     }
 
     @Override
@@ -46,7 +46,7 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
     @Override
     public Type modulus(Type type) {
-        return new ErrorType(type.getLine(), type.getColumn(), "Type '" + this + "' can NOT be modulled to '" + type + "'");
+        return new ErrorType(type.getLine(), type.getColumn(), "Type '" + this + "' can NOT be used in modulus operations with '" + type + "'");
     }
 
     @Override
@@ -71,7 +71,7 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
     @Override
     public Type mustBeBoolean(int line, int column) {
-        return new ErrorType(line, column, "'" + this +"' must be boolean");
+        return new ErrorType(line, column, "The type'" + this +"' must be boolean");
     }
 
     @Override

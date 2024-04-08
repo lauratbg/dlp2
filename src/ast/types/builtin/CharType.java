@@ -34,7 +34,7 @@ public class CharType extends AbstractType {
         if (t instanceof ErrorType)
             return;
         new ErrorType(t.getLine(), t.getColumn(),
-                "[Error] [" + t + "] can NOT be assigned to type [" + this + "]"
+                "The char '" + t + "' can NOT be assigned to type '" + this + "'"
         );
     }
 
@@ -60,8 +60,8 @@ public class CharType extends AbstractType {
         if (t instanceof CharType) return;
         if (t instanceof ErrorType) return;
 
-        new ErrorType(line, column, "[Error] The return is returning [" + t +"] instead of [" +
-                this + "]");
+        new ErrorType(line, column, "The return is should return '" + this +"' instead of '" +
+                t + "'");
     }
 
     @Override

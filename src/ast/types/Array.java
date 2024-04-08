@@ -79,7 +79,7 @@ public class Array extends AbstractType{
         if(t instanceof ErrorType)
             return t;
         return new ErrorType(t.getLine(), t.getColumn(),
-                "[Error] The index of the array is NOT an integer");
+                "The index of the array is NOT an integer");
     }
 
     @Override
@@ -88,8 +88,7 @@ public class Array extends AbstractType{
             return;
         if (type instanceof ErrorType)
             return;
-        new ErrorType(type.getLine(), type.getColumn(), String.format(
-                "Cannot assign type %s to type %s.", type, this
-        ));
+
+        new ErrorType(type.getLine(), type.getColumn(), "'" + type + "' can NOT be assigned to '" + this + "'");
     }
 }

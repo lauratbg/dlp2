@@ -45,10 +45,10 @@ public class FunctionType extends AbstractType{
     @Override
     public Type parenthesis(int line, int column, List<Type> t){
         if(t.size() != varDefinitionList.size())
-            return new ErrorType(line, column, "[Error] Invalid number of parameters");
+            return new ErrorType(line, column, "The number of parameters is NOT correct");
         for(int i = 0; i < t.size(); i++){
             if(!t.get(i).isAssignable(varDefinitionList.get(i).getType())){
-                return new ErrorType(line, column, "[Error] Invalid parameter in functionInvocation");
+                return new ErrorType(line, column, "There is an invalid parameter in function invocation");
             }
         }
         return type;

@@ -58,6 +58,6 @@ public class Record extends AbstractType {
             }
         }
         return new ErrorType(line, column,
-                "[Error] The field [" + t + "] was not found");
+                "The field '" + t + "' was NOT found");
     }
 }

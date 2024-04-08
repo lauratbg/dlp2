@@ -32,7 +32,7 @@ public class DoubleType extends AbstractType {
         if (t instanceof ErrorType)
             return;
         new ErrorType(t.getLine(), t.getColumn(),
-                "[Error] [" + t + "] can NOT be assigned to type [" + this + "]"
+                "The double '" + t + "' can NOT be assigned to type '" + this + "'"
         );
     }
     @Override
@@ -93,7 +93,7 @@ public class DoubleType extends AbstractType {
         if (t instanceof DoubleType) return;
         if (t instanceof ErrorType) return;
 
-        new ErrorType(line, column, "[Error] The return is returning [" + t +"] instead of [" +
-                this + "]");
+        new ErrorType(line, column, "The return is should return '" + this +"' instead of '" +
+                t + "'");
     }
 }
