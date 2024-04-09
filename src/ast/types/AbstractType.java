@@ -71,7 +71,7 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
     @Override
     public Type mustBeBoolean(int line, int column) {
-        return new ErrorType(line, column, "The type'" + this +"' must be boolean");
+        return new ErrorType(line, column, "The type '" + this +"' must be boolean");
     }
 
     @Override
@@ -92,6 +92,11 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
     @Override
     public Type squareBrackets(Type type) {
         return new ErrorType(type.getLine(), type.getColumn(), "Indexing with '" + this +"' is NOT correct");
+    }
+
+    @Override
+    public int numberOfBytes() {
+        return 0;
     }
 
 

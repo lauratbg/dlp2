@@ -100,7 +100,10 @@ public class IntType extends AbstractType {
                 t + "'");
     }
 
-
+    @Override
+    public int numberOfBytes() {
+        return 2;
+    }
 
 
 }

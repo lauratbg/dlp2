@@ -96,4 +96,9 @@ public class DoubleType extends AbstractType {
         new ErrorType(line, column, "The return is should return '" + this +"' instead of '" +
                 t + "'");
     }
+
+    @Override
+    public int numberOfBytes() {
+        return 4;
+    }
 }

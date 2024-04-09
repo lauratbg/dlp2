@@ -36,4 +36,6 @@ public interface Type extends ASTNode {
     boolean isAssignable(Type type);
 
     Type squareBrackets(Type type);
+
+    int numberOfBytes();
 }

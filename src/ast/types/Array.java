@@ -91,4 +91,9 @@ public class Array extends AbstractType{
 
         new ErrorType(type.getLine(), type.getColumn(), "'" + type + "' can NOT be assigned to '" + this + "'");
     }
+
+    @Override
+    public int numberOfBytes() {
+        return this.size * this.type.numberOfBytes();
+    }
 }

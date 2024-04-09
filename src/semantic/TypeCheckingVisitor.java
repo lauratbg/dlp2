@@ -227,8 +227,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public Void visit(Read read, Void param) {
         read.getExpression().accept(this, null);
-//            new ErrorType(read.getExpression().getLine(), read.getExpression().getColumn(),
-//                    "The lvalue expression of the read must be true");
+        if(!read.getExpression().getLvalue())
+            new ErrorType(read.getExpression().getLine(), read.getExpression().getColumn(),
+                    "The lvalue expression of the read must be true");
         read.getExpression().getType().mustBeReadable(read.getLine(), read.getColumn());
         return null;
     }

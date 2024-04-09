@@ -15,6 +15,7 @@ public class Record extends AbstractType {
         this.recordFieldList = new ArrayList<>(recordFieldList);
         checkErrors(recordFieldList);
 
+
     }
 
     /*
@@ -60,4 +61,15 @@ public class Record extends AbstractType {
         return new ErrorType(line, column,
                 "The field '" + t + "' was NOT found");
     }
+
+    @Override
+    public int numberOfBytes() {
+        int res = 0;
+        for (RecordField recordField: recordFieldList) {
+            res += recordField.getType().numberOfBytes();
+        }
+        return res;
+    }
+
+
 }
