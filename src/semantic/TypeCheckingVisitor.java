@@ -227,7 +227,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public Void visit(Read read, Void param) {
         read.getExpression().accept(this, null);
-        if(!read.getExpression().getLvalue())
+        if (!read.getExpression().getLvalue())
             new ErrorType(read.getExpression().getLine(), read.getExpression().getColumn(),
                     "The lvalue expression of the read must be true");
         read.getExpression().getType().mustBeReadable(read.getLine(), read.getColumn());
@@ -253,10 +253,10 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     @Override
     public Void visit(While wh, Void param) {
         wh.getExpression().accept(this, param);
-        for(int i = 0; i < wh.getStatementList().size(); i++)
+        for (int i = 0; i < wh.getStatementList().size(); i++)
             wh.getStatementList().get(i).accept(this, param);
         wh.getExpression().getType().mustBeBoolean(wh.getLine(), wh.getColumn());
-        //TODO:
+        wh.getStatementList().forEach(st -> st.setReturnType(wh.getReturnType()));
         return null;
     }
 
@@ -268,16 +268,17 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
     public Void visit(IfElse ifElse, Void param) {
         ifElse.getExpression().accept(this, param);
 
-        for(int i = 0; i < ifElse.getIfList().size(); i++)
+        for (int i = 0; i < ifElse.getIfList().size(); i++)
             ifElse.getIfList().get(i).accept(this, param);
 
-        if(ifElse.getElseList() != null || !ifElse.getElseList().isEmpty() )
-            for(int i = 0; i < ifElse.getElseList().size(); i++)
+        if (ifElse.getElseList() != null || !ifElse.getElseList().isEmpty())
+            for (int i = 0; i < ifElse.getElseList().size(); i++)
                 ifElse.getElseList().get(i).accept(this, param);
 
         ifElse.getExpression().getType().mustBeBoolean(ifElse.getLine(), ifElse.getColumn());
 
-        //TODO: return type
+        ifElse.getIfList().forEach(st -> st.setReturnType(ifElse.getReturnType()));
+        ifElse.getElseList().forEach(st -> st.setReturnType(ifElse.getReturnType()));
         return null;
     }
 
@@ -299,11 +300,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<Void, Void> {
      */
     @Override
     public Void visit(FuncDefinition funcDefinition, Void param) {
-//        funcDefinition.getFunctionBody().forEach(st -> st.setReturnType(((FunctionType)funcDefinition.getType()).getReturnType()));//TODO
-
         funcDefinition.getType().accept(this, param);
         funcDefinition.getFunctionBody().forEach(b -> b.accept(this, param));
-return null;
+        return null;
     }
 
 }

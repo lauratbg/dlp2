@@ -35,4 +35,14 @@ public class VarDefinition extends AbstractDefinition implements Statement {
     public void setOffset(int offset) {
         this.offset = offset;
     }
+
+    @Override
+    public Type getReturnType() {
+        return type;
+    }
+
+    @Override
+    public void setReturnType(Type type) {
+        this.type  =type;
+    }
 }

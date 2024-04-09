@@ -13,6 +13,8 @@ public class FunctionInvocation extends AbstractExpression implements Statement{
 
     private List<Expression> params;
 
+    private Type returnType; //xq me obliga a implementar el get y set
+
     public FunctionInvocation(int line, int column, Variable name, List<Expression> params) {
         super(line, column);
         this.functionName = name;
@@ -43,5 +45,15 @@ public class FunctionInvocation extends AbstractExpression implements Statement{
     @Override
     public String toString() {
         return functionName + "(" + params +")";
+    }
+
+    @Override
+    public Type getReturnType() {
+        return returnType;
+    }
+
+    @Override
+    public void setReturnType(Type type) {
+this.returnType = type;
     }
 }
