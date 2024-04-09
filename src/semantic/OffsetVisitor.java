@@ -1,5 +1,9 @@
 package semantic;
 
+import ast.program.FuncDefinition;
+import ast.program.VarDefinition;
+import ast.statements.Statement;
+import ast.types.FunctionType;
 import ast.types.Record;
 import ast.types.RecordField;
 
@@ -17,6 +21,14 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
                 globalBytesSum += varDef.type.noB();
            }
      */
+    @Override
+    public Void visit(VarDefinition varDefinition, Void param) {
+        if(varDefinition.getScope()==0){
+            varDefinition.setOffset(globalBytesSum);
+            globalBytesSum += varDefinition.getType().numberOfBytes();
+        }
+        return null;
+    }
 
     // &local=BP-ΣnOB(types(prev. locals including itself))
     /*
@@ -29,6 +41,17 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
                 }
            }
      */
+    @Override
+    public Void visit(FuncDefinition funcDefinition, Void param) {
+        int localBytesSum = 0;
+        for(Statement st : funcDefinition.getFunctionBody()){
+            if(st instanceof VarDefinition vardef){
+                localBytesSum += vardef.getType().numberOfBytes();
+                vardef.setOffset(-localBytesSum);
+            }
+        }
+        return null;
+    }
 
     // &param = BP + 4 + ΣnOB(types(params on the right not including itself))
     /*
@@ -40,6 +63,16 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
                 paramsBytesSum += v.type.noB();
            }
      */
+    @Override
+    public Void visit(FunctionType functionType, Void param) {
+        int paramsBytesSum = 0;
+        for(int i = functionType.getVarDefinitionList().size() - 1; i >= 0; i--){
+            VarDefinition v = functionType.getVarDefinitionList().get(i);
+            v.setOffset(4+paramsBytesSum);
+            paramsBytesSum += v.getType().numberOfBytes();
+        }
+        return null;
+    }
 
     // &field=ΣnOB(types(prev. fields not including itself))
     /*

@@ -6,6 +6,7 @@ import parser.*;
 
 import org.antlr.v4.runtime.*;
 import semantic.IdentificationVisitor;
+import semantic.OffsetVisitor;
 import semantic.TypeCheckingVisitor;
 import semantic.Visitor;
 
@@ -31,6 +32,10 @@ public class Main {
 
         Visitor<Void, Void> typeCheckingVisitor = new TypeCheckingVisitor();
         typeCheckingVisitor.visit(ast, null);
+
+        Visitor<Void, Void> offsetVisitor = new OffsetVisitor();
+        offsetVisitor.visit(ast, null);
+
 
         if (ErrorHandler.getInstance().anyErrors()) {
             ErrorHandler.getInstance().showErrors(System.err);

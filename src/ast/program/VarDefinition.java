@@ -7,9 +7,11 @@ import semantic.Visitor;
 public class VarDefinition extends AbstractDefinition implements Statement {
 
     private Type type;
+    private int offset;
     public VarDefinition(int line, int column, Type type, String name) {
         super(line, column, name);
         this.type = type;
+        offset = 0;
     }
 
     public Type getType() {
@@ -24,5 +26,13 @@ public class VarDefinition extends AbstractDefinition implements Statement {
     @Override
     public String toString() {
         return type + " " + getName();
+    }
+
+    public int getOffset() {
+        return offset;
+    }
+
+    public void setOffset(int offset) {
+        this.offset = offset;
     }
 }
