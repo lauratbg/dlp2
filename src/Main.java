@@ -1,4 +1,5 @@
 import ast.program.Program;
+import ast.types.Type;
 import errorhandler.ErrorHandler;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorView;
@@ -30,7 +31,7 @@ public class Main {
         Visitor<Void, Void> identificationVisitor= new IdentificationVisitor();
         identificationVisitor.visit(ast, null);
 
-        Visitor<Void, Void> typeCheckingVisitor = new TypeCheckingVisitor();
+        Visitor<Type, Void> typeCheckingVisitor = new TypeCheckingVisitor();
         typeCheckingVisitor.visit(ast, null);
 
         Visitor<Void, Void> offsetVisitor = new OffsetVisitor();

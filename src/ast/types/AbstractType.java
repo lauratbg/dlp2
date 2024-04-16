@@ -36,7 +36,7 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
     @Override
     public Type logical(Type type) {
-        return new ErrorType(type.getLine(), type.getColumn(), "Type '" + this + "' and'" + type + "' can NOT be used together in logical operations");
+        return new ErrorType(type.getLine(), type.getColumn(), "Type '" + this + "' and '" + type + "' can NOT be used together in logical operations");
     }
 
     @Override

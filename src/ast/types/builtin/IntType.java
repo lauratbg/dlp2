@@ -96,8 +96,8 @@ public class IntType extends AbstractType {
         if (t instanceof IntType) return;
         if (t instanceof ErrorType) return;
 
-        new ErrorType(line, column, "The return should return '" + this +"' instead of '" +
-                t + "'");
+        new ErrorType(line, column, "The return should return '" + t +"' instead of '" +
+                this + "'");
     }
 
     @Override

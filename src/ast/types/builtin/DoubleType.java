@@ -93,8 +93,8 @@ public class DoubleType extends AbstractType {
         if (t instanceof DoubleType) return;
         if (t instanceof ErrorType) return;
 
-        new ErrorType(line, column, "The return is should return '" + this +"' instead of '" +
-                t + "'");
+        new ErrorType(line, column, "The return should return '" + t +"' instead of '" +
+                this + "'");
     }
 
     @Override
