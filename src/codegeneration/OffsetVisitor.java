@@ -1,4 +1,4 @@
-package semantic;
+package codegeneration;
 
 import ast.program.FuncDefinition;
 import ast.program.VarDefinition;
@@ -6,6 +6,7 @@ import ast.statements.Statement;
 import ast.types.FunctionType;
 import ast.types.Record;
 import ast.types.RecordField;
+import semantic.AbstractVisitor;
 
 public class OffsetVisitor extends AbstractVisitor<Void, Void> {
     private int globalBytesSum;

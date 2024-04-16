@@ -6,7 +6,7 @@ import parser.*;
 
 import org.antlr.v4.runtime.*;
 import semantic.IdentificationVisitor;
-import semantic.OffsetVisitor;
+import codegeneration.OffsetVisitor;
 import semantic.TypeCheckingVisitor;
 import semantic.Visitor;
 
