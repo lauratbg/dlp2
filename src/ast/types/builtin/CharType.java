@@ -3,6 +3,7 @@ package ast.types.builtin;
 import ast.types.AbstractType;
 import ast.types.ErrorType;
 import ast.types.Type;
+import codegeneration.CodeGenerator;
 import com.sun.jdi.IntegerType;
 import semantic.Visitor;
 
@@ -81,5 +82,27 @@ public class CharType extends AbstractType {
         if (type instanceof CharType || type instanceof ErrorType)
             return new IntType(type.getLine(), type.getColumn());
         return super.modulus(type);
+    }
+
+    @Override
+    public char suffix() {
+        return 'b';
+    }
+
+    @Override
+    public void convertTo(CodeGenerator codeGenerator, Type type){
+        if(type instanceof DoubleType) {
+            codeGenerator.b2i();
+            codeGenerator.i2f();
+        }
+        else if(type instanceof IntType)
+            codeGenerator.b2i();
+    }
+
+    @Override
+    public Type highestType(Type type) {
+        if (type instanceof IntType || type instanceof DoubleType)
+            return type;
+        return this;
     }
 }

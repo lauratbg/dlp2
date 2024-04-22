@@ -4,9 +4,9 @@ import semantic.Visitor;
 
 public class Real_Literal extends AbstractExpression{
 
-    private Double value;
+    private double value;
 
-    public Real_Literal(int line, int column, Double value) {
+    public Real_Literal(int line, int column, double value) {
         super(line, column);
         this.value = value;
     }
@@ -20,5 +20,9 @@ public class Real_Literal extends AbstractExpression{
     public String toString() {
         return "(" + getLvalue() + ")" + value + "";
 
+    }
+
+    public double getValue() {
+        return value;
     }
 }

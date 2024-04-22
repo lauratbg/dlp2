@@ -5,6 +5,7 @@ import ast.types.FunctionType;
 import ast.types.Type;
 import semantic.Visitor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FuncDefinition extends AbstractDefinition {
@@ -42,5 +43,15 @@ public class FuncDefinition extends AbstractDefinition {
     @Override
     public String toString() {
         return type + " " + getName() + " {" + functionBody +"}";
+    }
+
+    public int sumOfBytes() {
+        List<VarDefinition> varDefinitions = new ArrayList<>();
+
+        for (Statement stmt: getFunctionBody())
+            if (stmt instanceof VarDefinition)
+                varDefinitions.add((VarDefinition) stmt);
+        return varDefinitions.stream().mapToInt(param -> param.getType().numberOfBytes()).sum();
+
     }
 }

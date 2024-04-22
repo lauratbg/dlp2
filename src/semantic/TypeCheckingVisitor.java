@@ -301,7 +301,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
     @Override
     public Void visit(FuncDefinition funcDefinition, Type param) {
         funcDefinition.getType().accept(this, param);
-        funcDefinition.getFunctionBody().forEach(b -> b.accept(this, ((FunctionType) funcDefinition.getType()).getType()));
+        funcDefinition.getFunctionBody().forEach(b -> b.accept(this, ((FunctionType) funcDefinition.getType()).getReturnType()));
         return null;
     }
 

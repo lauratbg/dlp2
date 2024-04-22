@@ -23,5 +23,7 @@ public class Char_Literal extends AbstractExpression{
     }
 
 
-
+    public char getValue() {
+        return  value;
+    }
 }

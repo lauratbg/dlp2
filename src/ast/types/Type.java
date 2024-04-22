@@ -2,6 +2,7 @@ package ast.types;
 
 import ast.ASTNode;
 import ast.expressions.Expression;
+import codegeneration.CodeGenerator;
 
 import java.util.List;
 
@@ -38,4 +39,10 @@ public interface Type extends ASTNode {
     Type squareBrackets(Type type);
 
     int numberOfBytes();
+
+    char suffix();
+
+    void convertTo(CodeGenerator cg, Type type);
+
+    Type highestType(Type type);
 }

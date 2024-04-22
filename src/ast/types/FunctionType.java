@@ -7,21 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FunctionType extends AbstractType{
-    private Type type;
+    private Type returnType;
     private List<VarDefinition> varDefinitionList;
 
     public FunctionType(int line, int column, Type type, List<VarDefinition> varDefinitionList) {
         super(line, column);
-        this.type = type;
+        this.returnType = type;
         this.varDefinitionList = new ArrayList<>(varDefinitionList);
     }
 
-    public Type getType() {
-        return type;
+    public Type getReturnType() {
+        return returnType;
     }
 
     public void setType(Type type) {
-        this.type = type;
+        this.returnType = type;
     }
 
     public List<VarDefinition> getVarDefinitionList() {
@@ -39,7 +39,7 @@ public class FunctionType extends AbstractType{
 
     @Override
     public String toString() {
-        return type + " " + varDefinitionList;
+        return returnType + " " + varDefinitionList;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class FunctionType extends AbstractType{
                 return new ErrorType(line, column, "There is an invalid parameter in function invocation");
             }
         }
-        return type;
+        return returnType;
     }
 
 }

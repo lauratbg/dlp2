@@ -1,5 +1,6 @@
 import ast.program.Program;
 import ast.types.Type;
+import codegeneration.*;
 import errorhandler.ErrorHandler;
 import introspector.model.IntrospectorModel;
 import introspector.view.IntrospectorView;
@@ -7,7 +8,6 @@ import parser.*;
 
 import org.antlr.v4.runtime.*;
 import semantic.IdentificationVisitor;
-import codegeneration.OffsetVisitor;
 import semantic.TypeCheckingVisitor;
 import semantic.Visitor;
 
@@ -36,6 +36,12 @@ public class Main {
 
         Visitor<Void, Void> offsetVisitor = new OffsetVisitor();
         offsetVisitor.visit(ast, null);
+
+        CodeGenerator codeGenerator = new CodeGenerator(args[1], args[0]);
+        AddressCGVisitor addressCGVisitor = new AddressCGVisitor(codeGenerator);
+        ValueCGVisitor valueCGVisitor = new ValueCGVisitor(codeGenerator, addressCGVisitor);
+
+        ast.accept(new ExecuteCGVisitor(codeGenerator, valueCGVisitor, addressCGVisitor), null);
 
 
         if (ErrorHandler.getInstance().anyErrors()) {

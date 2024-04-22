@@ -3,6 +3,7 @@ package ast.types.builtin;
 import ast.types.AbstractType;
 import ast.types.ErrorType;
 import ast.types.Type;
+import codegeneration.CodeGenerator;
 import semantic.Visitor;
 
 public class IntType extends AbstractType {
@@ -105,5 +106,25 @@ public class IntType extends AbstractType {
         return 2;
     }
 
+    @Override
+    public char suffix() {
+        return 'i';
+    }
 
+    @Override
+    public void convertTo(CodeGenerator codeGenerator, Type type){
+        if(type instanceof DoubleType)
+            codeGenerator.i2f();
+        else if(type instanceof CharType)
+            codeGenerator.i2b();
+    }
+
+    @Override
+    public Type highestType(Type type) {
+        if (type instanceof IntType || type instanceof CharType)
+            return this;
+        if (type instanceof DoubleType)
+            return type;
+        return null;
+    }
 }

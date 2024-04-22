@@ -4,6 +4,7 @@ import ast.AbstractASTNode;
 import ast.expressions.Expression;
 import ast.types.builtin.CharType;
 import ast.types.builtin.DoubleType;
+import codegeneration.CodeGenerator;
 import com.sun.jdi.IntegerType;
 
 import java.util.List;
@@ -99,6 +100,19 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
         return 0;
     }
 
+    @Override
+    public char suffix() {
+        return 'e';
+    }
 
+    @Override
+    public void convertTo(CodeGenerator cg, Type type){
+
+    }
+
+    @Override
+    public Type highestType(Type type) {
+        return null;
+    }
 
 }

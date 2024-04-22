@@ -1,11 +1,28 @@
 package codegeneration;
 
-public class ValueCGVisitor {
+import ast.expressions.*;
+import ast.types.Type;
+import semantic.AbstractVisitor;
+
+public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
+
+    private AddressCGVisitor addressCGVisitor;
+
+    public ValueCGVisitor(CodeGenerator cg, AddressCGVisitor addressCGVisitor) {
+        super(cg);
+        this.addressCGVisitor = addressCGVisitor;
+    }
+
     // Integer
     /*
         value[[IntLiteral: exp ⟶ IntType]]:
             <pushi > exp.value
      */
+    @Override
+    public Void visit(Int_Literal intLiteral, Void param){
+        cg.push(intLiteral.getValue());
+        return null;
+    }
 
     // Character
     /*
@@ -13,11 +30,22 @@ public class ValueCGVisitor {
             <pushb > (Integer) exp.value
      */
 
+    @Override
+    public Void visit(Char_Literal charLiteral, Void param){
+        cg.pushb(charLiteral.getValue());
+        return null;
+    }
+
     // Real
     /*
         value[[Real_Literal: exp ⟶ DoubleType]]:
             <pushf > exp.value
      */
+    @Override
+    public Void visit(Real_Literal realLiteral, Void param){
+        cg.pushf(realLiteral.getValue());
+        return null;
+    }
 
     // Variable
     /*
@@ -25,6 +53,12 @@ public class ValueCGVisitor {
             address[[exp]]
             load suffix
      */
+    @Override
+    public Void visit(Variable variable, Void param){
+        variable.accept(addressCGVisitor, null);
+        cg.load(variable.getDefinition().getType());
+        return null;
+    }
 
     // Arithmetic:
     /*
@@ -45,6 +79,26 @@ public class ValueCGVisitor {
                 default: assert false;
             }
      */
+    @Override
+    public Void visit(Arithmetic arithmetic, Void param){
+        arithmetic.getExpression1().accept(this, null);
+        arithmetic.getExpression1().getType().convertTo(cg, arithmetic.getType());
+        arithmetic.getExpression2().accept(this, null);
+        arithmetic.getExpression2().getType().convertTo(cg, arithmetic.getType());
+
+        switch (arithmetic.getOperator()){
+            case "+":
+                cg.add(arithmetic.getType()); break;
+            case "-":
+                cg.sub(arithmetic.getType()); break;
+            case "*":
+                cg.mul(arithmetic.getType()); break;
+            case "/":
+                cg.div(arithmetic.getType()); break;
+        }
+
+        return null;
+    }
 
     // Comparison
     /*
@@ -54,21 +108,49 @@ public class ValueCGVisitor {
             expression2.type.convertTo(highestType)
             value[[expression3]]
             expression3.type.convertTo(highestType)
-            switch (expression1.operator) {
-                case ">": <gt> expression2.suffix
+            switch (operator) {
+                case ">": <gt> highestType.suffix
                     break;
-                case "<": <lt> expression2.suffix
+                case "<": <lt> highestType.suffix
                     break;
-                case ">=": <ge> expression2.suffix
+                case ">=": <ge> highestType.suffix
                     break;
-                case "<=": <le> expression2.suffix
+                case "<=": <le> highestType.suffix
                     break;
-                case "==": <eq> expression2.suffix
+                case "==": <eq> highestType.suffix
                     break;
-                case "!=": <ne> expression2.suffix
+                case "!=": <ne> highestType.suffix
                     break;
             }
      */
+    @Override
+    public Void visit(Comparison comparison, Void param) {
+
+        Type highestType = comparison.getExpression1().getType().highestType(comparison.getExpression2().getType());
+        comparison.getExpression1().accept(this, null);
+        comparison.getExpression1().getType().convertTo(cg, highestType);
+        comparison.getExpression2().accept(this, null);
+        comparison.getExpression2().getType().convertTo(cg, highestType);
+
+        switch (comparison.getOperator()) {
+            case ">": cg.gt(highestType.suffix());
+                break;
+            case "<": cg.lt(highestType.suffix());
+                break;
+            case ">=": cg.ge(highestType.suffix());
+                break;
+            case "<=": cg.le(highestType.suffix());
+                break;
+            case "==": cg.eq(highestType.suffix());
+                break;
+            case "!=": cg.ne(highestType.suffix());
+                break;
+        }
+
+
+        return null;
+    }
+
 
     // Logical
     /*
@@ -83,6 +165,18 @@ public class ValueCGVisitor {
                 default: assert false;
             }
      */
+    @Override
+    public Void visit(Logical logical, Void param){
+        logical.getExpression1().accept(this, null);
+        logical.getExpression2().accept(this, null);
+        switch(logical.getOperator()){
+            case "&&":
+                cg.and(); break;
+            case "||":
+                cg.or(); break;
+        }
+        return null;
+    }
 
     // Cast
     /*
@@ -90,4 +184,23 @@ public class ValueCGVisitor {
             value[[exp2]]
             exp2.type.convertTo(exp1.type)
      */
+    @Override
+    public Void visit(Cast cast, Void param){
+        cast.getExpression().accept(this, null);
+        cast.getExpression().getType().convertTo(cg, cast.getCastType());
+        return null;
+    }
+
+    /* UnaryNot
+   value[[UnaryNot: exp1 -> exp2]] =
+       value[[exp1]]
+       <not>
+    */
+    @Override
+    public Void visit(UnaryNot unaryNot, Void param) {
+        unaryNot.getExpression().accept(this, param);
+        cg.not();
+        return null;
+    }
+
 }
