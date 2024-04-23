@@ -266,15 +266,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
      */
     @Override
     public Void visit(IfElse ifElse, Type param) {
-        ifElse.getExpression().accept(this, param);
-
-        for (int i = 0; i < ifElse.getIfList().size(); i++)
-            ifElse.getIfList().get(i).accept(this, param);
-
-        if (ifElse.getElseList() != null || !ifElse.getElseList().isEmpty())
-            for (int i = 0; i < ifElse.getElseList().size(); i++)
-                ifElse.getElseList().get(i).accept(this, param);
-
+        super.visit(ifElse, param);
         ifElse.getExpression().getType().mustBeBoolean(ifElse.getLine(), ifElse.getColumn());
 
         ifElse.getIfList().forEach(st -> st.setReturnType(ifElse.getReturnType()));

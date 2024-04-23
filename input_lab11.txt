@@ -1,9 +1,9 @@
 char c;
 int a;
-double r;
-int i;
 
 void main() {
+    double r;
+    int i;
 	c = 'a';
 	write c, '\n';
 

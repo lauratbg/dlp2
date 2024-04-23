@@ -32,6 +32,13 @@ public class Record extends AbstractType {
             }
         }
     }
+    public RecordField getRecordField(String field) {
+        for (RecordField f : recordFieldList) {
+            if (f.getName().equals(field))
+                return f;
+        }
+        return null;
+    }
 
     public List<RecordField> getRecordFieldList() {
         return recordFieldList;
@@ -70,6 +77,8 @@ public class Record extends AbstractType {
         }
         return res;
     }
+
+
 
 
 }

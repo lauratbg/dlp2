@@ -1,15 +1,23 @@
 
 #source	"input.txt"
 
+	' * Global variables:
+	' * char c (offset 0)
+	' * int a (offset 1)
 
 ' Invocation to the main function
 call main
 halt
 
 
-#line	6
+#line	4
 
  main:
+	' * Parameters
+	' * Local variables
+	' * real r (offset -4)
+	' * int i (offset -6)
+	enter	6
 
 #line	7
 	pusha	0
@@ -33,7 +41,9 @@ halt
 	storei
 
 #line	11
-	pusha	7
+	push	bp
+	pushi	-6
+	addi
 	pushb	48
 	b2i
 	pushi	3
@@ -53,7 +63,9 @@ halt
 
 #line	14
 	' * Write
-	pusha	7
+	push	bp
+	pushi	-6
+	addi
 	loadi
 	outi
 
@@ -64,7 +76,9 @@ halt
 
 #line	16
 	' * Read
-	pusha	3
+	push	bp
+	pushi	-4
+	addi
 	inf
 	storef
 
@@ -72,7 +86,9 @@ halt
 	' * Write
 	pushi	2
 	i2f
-	pusha	3
+	push	bp
+	pushi	-4
+	addi
 	loadf
 	mulf
 	outf
@@ -205,4 +221,4 @@ halt
 	' * Write
 	pushb	10
 	outb
-	ret	0, 0, 0
+	ret	0, 6, 0

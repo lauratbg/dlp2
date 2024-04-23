@@ -20,7 +20,7 @@ public class CharType extends AbstractType {
 
     @Override
     public String toString() {
-        return "Char";
+        return "char";
     }
     @Override
     public boolean isAssignable(Type type) {

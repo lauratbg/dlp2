@@ -192,7 +192,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     }
 
     /* UnaryNot
-   value[[UnaryNot: exp1 -> exp2]] =
+   value[[UnaryNot: exp1 ⟶ exp2]] =
        value[[exp1]]
        <not>
     */
@@ -200,6 +200,47 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     public Void visit(UnaryNot unaryNot, Void param) {
         unaryNot.getExpression().accept(this, param);
         cg.not();
+        return null;
+    }
+
+    /* Modulus
+    value[[Modulus: exp1 ⟶ exp2 % exp3]] =
+        value[[exp2]]
+        value[[exp3]]
+        <mod > exp1.type.suffix
+     */
+    @Override
+    public Void visit(Modulus mod, Void param){
+        mod.getExpression1().accept(this, null);
+        mod.getExpression2().accept(this, null);
+        cg.mod(mod.getType());
+
+        return null;
+    }
+
+    // Indexing
+    /*
+        value[[Indexing: exp1 ⟶ exp2 exp3]] =
+            address[[exp1]]
+            <load > exp1.type.suffix()
+     */
+    @Override
+    public Void visit(Indexing indexing, Void param){
+        indexing.getExpression1().accept(addressCGVisitor, param);
+        cg.load(indexing.getExpression1().getType());
+        return null;
+    }
+
+    // FieldAccess
+    /*
+        value[[FieldAccess: exp1 ⟶ exp2 ID]] =
+            address[[exp1]];
+            <load > exp1.type.suffix()
+     */
+    @Override
+    public Void visit(FieldAccess fieldAccess, Void param){
+        fieldAccess.getExpression().accept(addressCGVisitor, param);
+        cg.load(fieldAccess.getExpression().getType());
         return null;
     }
 

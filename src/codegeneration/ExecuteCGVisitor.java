@@ -5,10 +5,7 @@ import ast.program.Definition;
 import ast.program.FuncDefinition;
 import ast.program.Program;
 import ast.program.VarDefinition;
-import ast.statements.Assignment;
-import ast.statements.Read;
-import ast.statements.Statement;
-import ast.statements.Write;
+import ast.statements.*;
 import ast.types.FunctionType;
 import semantic.AbstractVisitor;
 
@@ -88,11 +85,12 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         cg.writeLine(funcDefinition.getLine());
         cg.write("\n " + funcDefinition.getName() + ": ");
         funcDefinition.getType().accept(this, null);
-//        cg.addComment("Local variables");
+        cg.addComment("Local variables");
+        //TODO: no están saliendo las locales
         for(Statement stmt : funcDefinition.getFunctionBody())
             if(stmt instanceof VarDefinition)
                 stmt.accept(this, null);
-//        cg.enter(funcDefinition.sumOfBytes());
+        cg.enter(funcDefinition.sumOfBytes());
         for(Statement stmt : funcDefinition.getFunctionBody())
             if(!(stmt instanceof VarDefinition))
                 stmt.accept(this, null);
@@ -107,8 +105,23 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
      */
     @Override
     public Void visit(VarDefinition varDefinition, Void param) {
-//        cg.addComment(varDefinition.getType() + " " + varDefinition.getName() + " (offset " + varDefinition.getOffset() + ")");
+        cg.addComment(varDefinition.getType() + " " + varDefinition.getName() + " (offset " + varDefinition.getOffset() + ")");
 
+        return null;
+    }
+
+
+    /* Function
+    execute [[Function : function -> type ID varDefinition+]] =
+        <' * Parameters>
+        for(VarDefinition var : varDefinition*)
+            execute[[var]]
+     */
+    @Override
+    public Void visit(FunctionType functionType, Void param) {
+        cg.addComment("Parameters");
+        for(VarDefinition var : functionType.getVarDefinitionList())
+            var.accept(this, null);
         return null;
     }
 
@@ -129,10 +142,12 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
      */
     @Override
     public Void visit(Program program, Void param) {
+        cg.addComment("Global variables:");
+
         for(Definition def : program.getDefinitionList())
             if(def instanceof VarDefinition)
                 def.accept(this, null);
-        cg.write("\n'Invocation to the main function");
+        cg.write("\n' Invocation to the main function");
         cg.write("call main");
         cg.write("halt");
 
@@ -142,18 +157,59 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<Void, Void> {
         return null;
     }
 
-    /* Modulus
-    value[[Modulus: exp1 -> exp2 (%) exp3]] =
-        value[[exp2]]
-        value[[exp3]]
-        <mod > exp1.type.suffix(); break;
+    // While
+    /*
+        execute[[WhileStmt: statement ⟶ expression statement*]] =
+            String condLabel = cg.nextLabel();
+                   exitLabel = cg.nextLabel();
+            condLabel<:>
+            value[[expression]]
+            <jz > exitLabel
+            statement*.forEach(stmt -> execute[[stmt]])
+            <jmp > condLabel
+            exitLabel<:>
      */
     @Override
-    public Void visit(Modulus mod, Void param){
-        mod.getExpression1().accept(this, null);
-        mod.getExpression2().accept(this, null);
-        cg.mod(mod.getType());
+    public Void visit(While wh, Void param) {
+        String condLabel = cg.nextLabel();
+        String exitLabel = cg.nextLabel();
+        cg.write(condLabel + ":");
+        wh.getExpression().accept(valueCGVisitor, param);
+        cg.jz(exitLabel);
+        for(Statement statement : wh.getStatementList())
+            statement.accept(this, param);
+        cg.jmp(condLabel);
+        cg.write(exitLabel + ":");
+        return null;
+    }
 
+    // IfElse
+    /*
+        execute[[IfElse: statement1 -> expression statement2* statement3*]] =
+            value[[expression]]
+            String elseBody = codeGenerator.nextLabel(),
+                   exitLabel = codeGenerator.nextLabel();
+            <jz > elseBody
+            statement2*.forEach(stmt -> execute[[stmt]])
+            <jmp > exitLabel
+            elseBody <:>
+            statement3*.forEach(stmt -> execute[[stmt]])
+            exitLabel <:>
+     */
+    @Override
+    public Void visit(IfElse ifElse, Void param) {
+        ifElse.getExpression().accept(valueCGVisitor, param);
+        String elseBody = cg.nextLabel();
+        String exitLabel = cg.nextLabel();
+        cg.jz(elseBody);
+        for(Statement statement : ifElse.getIfList())
+            statement.accept(this, param);
+        cg.jmp(exitLabel);
+        cg.write(elseBody + ":");
+        for(Statement statement : ifElse.getElseList())
+            statement.accept(this, param);
+
+        cg.write(exitLabel + ":");
         return null;
     }
 }

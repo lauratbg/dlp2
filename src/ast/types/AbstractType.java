@@ -72,7 +72,8 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
     @Override
     public Type mustBeBoolean(int line, int column) {
-        return new ErrorType(line, column, "The type '" + this +"' must be boolean");
+//        return new ErrorType(line, column, "The type '" + this +"' must be boolean");
+        return null;
     }
 
     @Override

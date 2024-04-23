@@ -141,6 +141,7 @@ public abstract class AbstractVisitor<TP, TR> implements Visitor<TP, TR>{
         if(ifElse.getElseList() != null || !ifElse.getElseList().isEmpty() )
             for(int i = 0; i < ifElse.getElseList().size(); i++)
                 ifElse.getElseList().get(i).accept(this, param);
+
         return null;
     }
 

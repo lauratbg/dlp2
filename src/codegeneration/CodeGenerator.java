@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 
 public class CodeGenerator {
 
+    private int label = 0;
     private PrintWriter out;
 
     public CodeGenerator(String outFilename, String inFilename) throws IOException {
@@ -76,7 +77,7 @@ public class CodeGenerator {
     }
 
     public void ret(int i, int i1, int i2) {
-        out.println("\t ret" + i + ", " + i1 + ", " + i2);
+        out.println("\t ret " + i + ", " + i1 + ", " + i2);
         out.flush();
     }
 
@@ -178,6 +179,30 @@ public class CodeGenerator {
 
     public void not() {
         out.println("\tnot");
+        out.flush();
+    }
+
+    public void muli() {
+        out.println("\tmuli");
+        out.flush();
+    }
+
+    public void addi() {
+        out.println("\taddi");
+        out.flush();
+    }
+
+    public String nextLabel() {
+        return "label" + this.label++;
+    }
+
+    public void jz(String exitLabel) {
+        out.println("\tjz\t" + exitLabel);
+        out.flush();
+    }
+
+    public void jmp(String condLabel) {
+        out.println("\tjmp\t" + condLabel);
         out.flush();
     }
 }
