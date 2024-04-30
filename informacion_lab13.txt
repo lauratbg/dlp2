@@ -1,0 +1,19 @@
+value: write f(_)
+value: a + f(_)
+execute f(_);
+
+DEPENDS ON THE PARENT, in the two first ones
+
+
+Errores del lab12:
+	input_lab12.txt
+		#line 14
+			sale pushi0 en vez de pushi 4
+		#line 15 
+			sale pushi0 en vez de pushi 2
+			ERROR EN ADDRESS FIELD ACCESS CON EL OFFSET
+		#line 16
+		#line 22 
+			sale pushi 40 en vez de pushi 4
+		#line 36
+			dos errores en dos pushis
