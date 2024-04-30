@@ -63,7 +63,7 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void,Void> {
 
     // Field Access
     /*
-        value[[FieldAccess: exp1 ⟶ exp2 ID]] =
+        address[[FieldAccess: exp1 ⟶ exp2 ID]] =
             address[[exp2]]
             <pushi > expression2.type.getField(ID).offset
             <addi>

@@ -33,9 +33,9 @@ public class Record extends AbstractType {
         }
     }
     public RecordField getRecordField(String field) {
-        for (RecordField f : recordFieldList) {
-            if (f.getName().equals(field))
-                return f;
+        for (RecordField recordField : recordFieldList) {
+            if (recordField.getName().equals(field))
+                return recordField;
         }
         return null;
     }
@@ -55,7 +55,7 @@ public class Record extends AbstractType {
 
     @Override
     public String toString() {
-        return "struct {" + recordFieldList + "}";
+        return "record (" + recordFieldList + ")";
     }
 
     @Override

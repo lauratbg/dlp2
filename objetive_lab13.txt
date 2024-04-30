@@ -1,0 +1,4 @@
+Generate code for:
+- Function invocation (function definition has already been implemented in laboratory 10)
+- The return statement
+Very important: Your compiler must be able to compile big-input.txt and input.txt (the files cannot be changed), and you *must* bring the files to the exam. The output code generated must run in MAPL with no errors or warnings.

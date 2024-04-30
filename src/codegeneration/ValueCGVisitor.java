@@ -1,6 +1,7 @@
 package codegeneration;
 
 import ast.expressions.*;
+import ast.statements.FunctionInvocation;
 import ast.types.Type;
 import semantic.AbstractVisitor;
 
@@ -239,8 +240,22 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
      */
     @Override
     public Void visit(FieldAccess fieldAccess, Void param){
-        fieldAccess.getExpression().accept(addressCGVisitor, param);
+        fieldAccess.accept(addressCGVisitor, param); //must traverse the parent
         cg.load(fieldAccess.getExpression().getType());
+        return null;
+    }
+
+    //Funct Invocation as expression
+    /*
+        value[[FunctionInvocation: expression1 -> expression2 expression3*]] =
+            expression3.forEach(param -> value[[param]])
+            <call > expression2.name
+     */
+    @Override
+    public Void visit(FunctionInvocation functionInvocation, Void param) {
+        for(int i = 0; i < functionInvocation.getParams().size(); i++)
+            functionInvocation.getParams().get(i).accept(this, null);
+        cg.call(functionInvocation.getFunctionName().getName());
         return null;
     }
 

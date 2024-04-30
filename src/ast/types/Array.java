@@ -69,7 +69,7 @@ public class Array extends AbstractType{
 
     @Override
     public String toString() {
-        return type + "[" + size + "]";
+        return "[" + size + "," + type + "]";
     }
 
     @Override

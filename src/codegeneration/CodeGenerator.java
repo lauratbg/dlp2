@@ -205,4 +205,18 @@ public class CodeGenerator {
         out.println("\tjmp\t" + condLabel);
         out.flush();
     }
+
+    public void call(String name) {
+        out.println("\tcall " + name);
+        out.flush();
+    }
+
+    public void pop(Type returnType) {
+        out.println("\tpop " + returnType.suffix());
+        out.flush();
+    }
+
+    public void allocateMemory(int memory) {
+        write("enter\t" + memory);
+    }
 }
