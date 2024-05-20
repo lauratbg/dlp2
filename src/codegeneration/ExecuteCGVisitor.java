@@ -90,26 +90,27 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO, Void> {
         cg.write("\n " + funcDefinition.getName() + ": ");
         funcDefinition.getType().accept(this, null);
         cg.addComment("Local variables");
-        List<VarDefinition> functionBody = funcDefinition.getVarDefinition();
-        for(Statement stmt : functionBody)
-            if(stmt instanceof VarDefinition)
+        List<VarDefinition> varDefinitions = funcDefinition.getVarDefinition();
+
+        for(Statement stmt : varDefinitions)
                 stmt.accept(this, param);
 
-        int bytesLocals = functionBody.isEmpty() ? 0 : -functionBody.get(functionBody.size() - 1).getOffset();
+        int bytesLocals = varDefinitions.isEmpty() ? 0 : -varDefinitions.get(varDefinitions.size() - 1).getOffset();
 
         cg.enter(funcDefinition.sumOfBytes());
+
 
         int bytesReturn = ((FunctionType) funcDefinition.getType()).getReturnType().numberOfBytes();
         int bytesArgs = funcDefinition.getType().numberOfBytes();
 
         ExecuteCGDTO executeCGDTO = new ExecuteCGDTO(bytesReturn, bytesLocals, bytesArgs);
 
-        for(Statement stmt : functionBody)
+        for(Statement stmt : funcDefinition.getFunctionBody())
             if(!(stmt instanceof VarDefinition))
                 stmt.accept(this, executeCGDTO);
 
         if (bytesReturn == 0)
-            cg.ret(bytesReturn,bytesLocals, bytesArgs);
+            cg.ret(bytesReturn, bytesLocals, bytesArgs);
         return null;
     }
 
@@ -256,7 +257,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO, Void> {
         for(Expression exp: functionInvocation.getParams())
             exp.accept(valueCGVisitor, null);
         cg.call(functionInvocation.functionName.getName());
-        if(!(functionInvocation.getReturnType() instanceof VoidType))
+        if(!(functionInvocation.getReturnType() instanceof VoidType) && functionInvocation.getReturnType() != null)
             cg.pop(functionInvocation.getReturnType());
         return null;
     }
