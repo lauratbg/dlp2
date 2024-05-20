@@ -31,6 +31,16 @@ public class FuncDefinition extends AbstractDefinition {
         return functionBody;
     }
 
+    public List<VarDefinition> getVarDefinition() {
+        List<VarDefinition> res = new ArrayList<>();
+        for(Statement st : functionBody){
+            if(st instanceof VarDefinition){
+                res.add((VarDefinition) st);
+            }
+        }
+        return res;
+    }
+
     public void setFunctionBody(List<Statement> functionBody) {
         this.functionBody = functionBody;
     }

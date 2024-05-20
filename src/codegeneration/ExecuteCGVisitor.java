@@ -11,6 +11,8 @@ import ast.types.FunctionType;
 import ast.types.VoidType;
 import semantic.AbstractVisitor;
 
+import java.util.List;
+
 public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO, Void> {
 
     private ValueCGVisitor valueCGVisitor;
@@ -88,28 +90,26 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO, Void> {
         cg.write("\n " + funcDefinition.getName() + ": ");
         funcDefinition.getType().accept(this, null);
         cg.addComment("Local variables");
-        for(Statement stmt : funcDefinition.getFunctionBody())
+        List<VarDefinition> functionBody = funcDefinition.getVarDefinition();
+        for(Statement stmt : functionBody)
             if(stmt instanceof VarDefinition)
                 stmt.accept(this, param);
+
+        int bytesLocals = functionBody.isEmpty() ? 0 : -functionBody.get(functionBody.size() - 1).getOffset();
+
         cg.enter(funcDefinition.sumOfBytes());
 
-//TODO:
-        /*
-        int bytesLocals = funcDefinition.getFunctionBody().size() > 0
-                ? - funcDefinition.getFunctionBody().get(funcDefinition.getFunctionBody().size()-1).getOffset()
-                : 0;
-
-        cg.allocateMemory(bytesLocals);
-         */
         int bytesReturn = ((FunctionType) funcDefinition.getType()).getReturnType().numberOfBytes();
         int bytesArgs = funcDefinition.getType().numberOfBytes();
 
-//        ExecuteCGDTO executeCGDTO = new ExecuteCGDTO(bytesReturn, bytesLocals, bytesArgs);
+        ExecuteCGDTO executeCGDTO = new ExecuteCGDTO(bytesReturn, bytesLocals, bytesArgs);
 
-        for(Statement stmt : funcDefinition.getFunctionBody())
-//            if(!(stmt instanceof VarDefinition))
-//                stmt.accept(this, executeCGDTO);
-        cg.ret(0, funcDefinition.sumOfBytes(), ((FunctionType)funcDefinition.getType()).numberOfBytes());
+        for(Statement stmt : functionBody)
+            if(!(stmt instanceof VarDefinition))
+                stmt.accept(this, executeCGDTO);
+
+        if (bytesReturn == 0)
+            cg.ret(bytesReturn,bytesLocals, bytesArgs);
         return null;
     }
 

@@ -1,0 +1,70 @@
+
+#source input_lab13.txt
+
+	' * Global variables:
+	' * int i (offset 0)
+	' * int n (offset 2)
+	' * int j (offset 4)
+	' * char c (offset 6)
+	' * record ([int integer, char character]) pair (offset 7)
+	' * [10,[10,int]] matrix (offset 10)
+
+' Invocation to the main function
+call main
+halt
+
+
+#line 	12
+
+ p: 
+	' * Parameters
+	' * Local variables
+	enter 0
+	 ret 0, 0, 0
+
+
+#line 	14
+
+ f: 
+	' * Parameters
+	' * real r (offset 0)
+	' * int e (offset 0)
+	' * Local variables
+	' * real real (offset -4)
+	' * char c (offset -5)
+	enter 5
+
+
+#line 	24
+
+ fill: 
+	' * Parameters
+	' * int row (offset 0)
+	' * int value (offset 0)
+	' * int increment (offset 0)
+	' * Local variables
+	' * int i (offset -2)
+	' * int inc (offset -4)
+	enter 4
+	 ret 0, 4, 0
+
+
+#line 	35
+
+ show: 
+	' * Parameters
+	' * int row (offset 0)
+	' * Local variables
+	' * int i (offset -2)
+	enter 2
+	 ret 0, 2, 0
+
+
+#line 	47
+
+ main: 
+	' * Parameters
+	' * Local variables
+	' * int i (offset -2)
+	enter 2
+	 ret 0, 2, 0

@@ -216,7 +216,4 @@ public class CodeGenerator {
         out.flush();
     }
 
-    public void allocateMemory(int memory) {
-        write("enter\t" + memory);
-    }
 }
