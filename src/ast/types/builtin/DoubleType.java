@@ -111,11 +111,13 @@ public class DoubleType extends AbstractType {
     @Override
     public void convertTo(CodeGenerator codeGenerator, Type type){
         if(type instanceof CharType) {
+            codeGenerator.f2i();
             codeGenerator.i2b();
-            codeGenerator.f2i();
         }
-        else if(type instanceof IntegerType)
+        else if(type instanceof IntegerType){
             codeGenerator.f2i();
+
+        }
     }
 
     @Override

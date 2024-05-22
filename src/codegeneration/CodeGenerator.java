@@ -22,7 +22,7 @@ public class CodeGenerator {
     }
 
     public void pusha(int offset) {
-        out.println("\tpusha " + offset);
+        out.println("\tpusha\t" + offset);
         out.flush();
     }
 
@@ -32,7 +32,7 @@ public class CodeGenerator {
     }
 
     public void push(int offset) {
-        out.println("\tpushi " + offset);
+        out.println("\tpushi\t" + offset);
         out.flush();
     }
 
@@ -72,17 +72,17 @@ public class CodeGenerator {
     }
 
     public void enter(int i) {
-        out.println("\tenter " + i);
+        out.println("\tenter\t" + i);
         out.flush();
     }
 
     public void ret(int i, int i1, int i2) {
-        out.println("\t ret " + i + ", " + i1 + ", " + i2);
+        out.println("\tret " + i + ", " + i1 + ", " + i2);
         out.flush();
     }
 
     public void pushb(int value) {
-        out.println("\tpushb " + value);
+        out.println("\tpushb\t" + value);
         out.flush();
     }
 
@@ -168,7 +168,7 @@ public class CodeGenerator {
     }
 
     public void pushf(double value) {
-        out.println("\tpushf " + value);
+        out.println("\tpushf\t" + value);
         out.flush();
     }
 
@@ -207,12 +207,12 @@ public class CodeGenerator {
     }
 
     public void call(String name) {
-        out.println("\tcall " + name);
+        out.println("\tcall\t" + name);
         out.flush();
     }
 
     public void pop(Type returnType) {
-        out.println("\tpop " + returnType.suffix());
+        out.println("\tpop" + returnType.suffix());
         out.flush();
     }
 

@@ -187,15 +187,18 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO, Void> {
      */
     @Override
     public Void visit(While wh, ExecuteCGDTO param) {
+        cg.addComment("While");
+        cg.writeLine(wh.getLine());
         String condLabel = cg.nextLabel();
         String exitLabel = cg.nextLabel();
-        cg.write(condLabel + ":");
+        cg.write(" " +condLabel + ":");
         wh.getExpression().accept(valueCGVisitor, null);
         cg.jz(exitLabel);
+        cg.addComment("Body of the while statement");
         for(Statement statement : wh.getStatementList())
             statement.accept(this, param);
         cg.jmp(condLabel);
-        cg.write(exitLabel + ":");
+        cg.write(" " + exitLabel + ":");
         return null;
     }
 
@@ -214,18 +217,22 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO, Void> {
      */
     @Override
     public Void visit(IfElse ifElse, ExecuteCGDTO param) {
+        cg.addComment("If statement");
+        cg.writeLine(ifElse.getLine());
         ifElse.getExpression().accept(valueCGVisitor, null);
         String elseBody = cg.nextLabel();
         String exitLabel = cg.nextLabel();
         cg.jz(elseBody);
+        cg.addComment("Body of the if branch");
         for(Statement statement : ifElse.getIfList())
             statement.accept(this, param);
         cg.jmp(exitLabel);
-        cg.write(elseBody + ":");
+        cg.write(" " + elseBody + ":");
+        cg.addComment("Body of the else branch");
         for(Statement statement : ifElse.getElseList())
             statement.accept(this, param);
 
-        cg.write(exitLabel + ":");
+        cg.write(" " + exitLabel + ":");
         return null;
     }
 
@@ -237,6 +244,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO, Void> {
      */
     @Override
     public Void visit(Return ret, ExecuteCGDTO param) {
+        cg.writeLine(ret.getLine());
         cg.addComment("Return");
         ret.getExpression().accept(valueCGVisitor, null);
         cg.ret(param.bytesReturn, param.bytesLocals, param.bytesArgs);
@@ -256,9 +264,13 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO, Void> {
     public Void visit(FunctionInvocation functionInvocation, ExecuteCGDTO param) {
         for(Expression exp: functionInvocation.getParams())
             exp.accept(valueCGVisitor, null);
+        cg.writeLine(functionInvocation.getLine());
         cg.call(functionInvocation.functionName.getName());
-        if(!(functionInvocation.getReturnType() instanceof VoidType) && functionInvocation.getReturnType() != null)
-            cg.pop(functionInvocation.getReturnType());
+        System.out.println(functionInvocation.getReturnType());
+
+        if (!(((FunctionType)functionInvocation.getFunctionName().getType()).getReturnType() instanceof VoidType))
+            cg.pop(((FunctionType)functionInvocation.getFunctionName().getType()).getReturnType());
+
         return null;
     }
 }

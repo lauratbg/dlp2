@@ -227,8 +227,8 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
      */
     @Override
     public Void visit(Indexing indexing, Void param){
-        indexing.getExpression1().accept(addressCGVisitor, param);
-        cg.load(indexing.getExpression1().getType());
+        indexing.accept(addressCGVisitor, param);
+        cg.load(indexing.getType());
         return null;
     }
 
@@ -241,7 +241,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     @Override
     public Void visit(FieldAccess fieldAccess, Void param){
         fieldAccess.accept(addressCGVisitor, param); //must traverse the parent
-        cg.load(fieldAccess.getExpression().getType());
+        cg.load(fieldAccess.getType());
         return null;
     }
 

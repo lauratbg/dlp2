@@ -44,6 +44,8 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
      */
     @Override
     public Void visit(FuncDefinition funcDefinition, Void param) {
+        funcDefinition.getType().accept(this, param);
+        funcDefinition.getFunctionBody().forEach(f -> f.accept(this, param));
         int localBytesSum = 0;
         for(Statement st : funcDefinition.getFunctionBody()){
             if(st instanceof VarDefinition vardef){

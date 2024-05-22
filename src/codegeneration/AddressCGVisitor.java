@@ -55,7 +55,7 @@ public class AddressCGVisitor extends AbstractCGVisitor<Void,Void> {
         indexing.getExpression1().accept(this, param);
         indexing.getExpression2().accept(valueCGVisitor, param);
 
-        cg.push(indexing.getExpression1().getType().numberOfBytes());
+        cg.push(indexing.getType().numberOfBytes());
         cg.muli();
         cg.addi();
         return null;
