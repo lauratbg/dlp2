@@ -189,6 +189,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
     public Void visit(Cast cast, Void param){
         cast.getExpression().accept(this, null);
         cast.getExpression().getType().convertTo(cg, cast.getCastType());
+
         return null;
     }
 

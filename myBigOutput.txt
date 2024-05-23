@@ -101,6 +101,7 @@ halt
 	pushi	-4
 	addi
 	loadf
+	f2i
 	storei
  label1:
 

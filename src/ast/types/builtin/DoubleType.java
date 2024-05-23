@@ -114,7 +114,7 @@ public class DoubleType extends AbstractType {
             codeGenerator.f2i();
             codeGenerator.i2b();
         }
-        else if(type instanceof IntegerType){
+        else if(type instanceof IntType){
             codeGenerator.f2i();
 
         }
