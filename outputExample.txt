@@ -1,0 +1,59 @@
+
+#source input_example.txt
+
+	' * Global variables:
+
+' Invocation to the main function
+call main
+halt
+
+
+#line 	1
+
+ f: 
+	' * Parameters
+	' * int a (offset 8)
+	' * real b (offset 4)
+	' * Local variables
+	enter	0
+
+
+#line 	2
+	' * Return
+	push	bp
+	pushi	8
+	addi
+	loadi
+	pushi	1
+	addi
+	ret 4, 0, 0
+
+
+#line 	5
+
+ main: 
+	' * Parameters
+	' * Local variables
+	' * real real (offset -4)
+	' * int integer (offset -6)
+	enter	6
+
+
+#line 	9
+	push	bp
+	pushi	-6
+	addi
+	pushb	97
+	storei
+
+
+#line 	10
+	push	bp
+	pushi	-4
+	addi
+	push	bp
+	pushi	-6
+	addi
+	loadi
+	storef
+	ret 0, 6, 0

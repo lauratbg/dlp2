@@ -1,0 +1,11 @@
+double f(int a, double b) {
+	return a + 1;
+}
+
+void main() {
+	double real;
+	int integer;
+
+	integer = 'a';
+	real=integer;
+}
