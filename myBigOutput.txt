@@ -331,7 +331,7 @@ halt
 
 #line 	51
 	pusha	0
-	pushi	0
+	pushi	2
 	addi
 	pushb	48
 	storeb
@@ -354,7 +354,7 @@ halt
 	loadi
 	i2f
 	pusha	0
-	pushi	0
+	pushi	2
 	addi
 	loadb
 	b2i

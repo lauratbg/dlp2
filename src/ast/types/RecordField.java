@@ -16,7 +16,6 @@ public class RecordField extends AbstractASTNode {
         super(line, column);
         this.type= type;
         this.name = name;
-        this.offset = 0;
 
     }
 

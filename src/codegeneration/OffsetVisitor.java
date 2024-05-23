@@ -24,6 +24,8 @@ public class OffsetVisitor extends AbstractVisitor<Void, Void> {
      */
     @Override
     public Void visit(VarDefinition varDefinition, Void param) {
+        varDefinition.getType().accept(this, param);
+
         if(varDefinition.getScope()==0){
             varDefinition.setOffset(globalBytesSum);
             globalBytesSum += varDefinition.getType().numberOfBytes();
