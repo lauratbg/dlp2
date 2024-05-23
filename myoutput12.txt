@@ -37,7 +37,7 @@ halt
 	push	bp
 	pushi	-54
 	addi
-	pushi	0
+	pushi	4
 	addi
 	pushb	97
 	b2i
@@ -48,7 +48,7 @@ halt
 	push	bp
 	pushi	-54
 	addi
-	pushi	0
+	pushi	2
 	addi
 	push	bp
 	pushi	-54
@@ -59,7 +59,7 @@ halt
 	push	bp
 	pushi	-54
 	addi
-	pushi	0
+	pushi	4
 	addi
 	loadi
 	muli
@@ -92,7 +92,7 @@ halt
 	push	bp
 	pushi	-54
 	addi
-	pushi	0
+	pushi	2
 	addi
 	loadi
 	outi
@@ -109,7 +109,7 @@ halt
 	push	bp
 	pushi	-54
 	addi
-	pushi	0
+	pushi	4
 	addi
 	loadi
 	i2f

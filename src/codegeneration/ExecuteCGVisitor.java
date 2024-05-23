@@ -101,7 +101,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO, Void> {
 
 
         int bytesReturn = ((FunctionType) funcDefinition.getType()).getReturnType().numberOfBytes();
-        int bytesArgs = funcDefinition.getType().numberOfBytes();
+        int bytesArgs = funcDefinition.getType().getVarDefinitionList().stream().mapToInt(p -> p.getType().numberOfBytes()).sum();
 
         ExecuteCGDTO executeCGDTO = new ExecuteCGDTO(bytesReturn, bytesLocals, bytesArgs);
 

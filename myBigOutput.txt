@@ -112,7 +112,7 @@ halt
 	pushi	-7
 	addi
 	loadi
-	ret 2, 7, 0
+	ret 2, 7, 6
 
 
 #line 	31
