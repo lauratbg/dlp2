@@ -17,7 +17,7 @@ public class CodeGenerator {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        out.println("\n#source " + inFilename + "\n");
+        out.println("\n#source \"" + inFilename +  '"' + "\n");
         out.flush();
     }
 

@@ -1,5 +1,5 @@
 
-#source big-input.txt
+#source "big-input.txt"
 
 	' * Global variables:
 	' * record ([int integer, char character]) pair (offset 0)
