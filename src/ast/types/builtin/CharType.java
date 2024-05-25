@@ -102,6 +102,15 @@ public class CharType extends AbstractType {
     }
 
     @Override
+    public Type comparison(Type t) {
+        if (t instanceof ErrorType)
+            return t;
+        if (t instanceof CharType)
+            return this;
+        return new ErrorType(t.getLine(), t.getColumn(), "'" + t + "' does not support comparison operations with '" + this +"'");
+    }
+
+    @Override
     public Type highestType(Type type) {
         if (type instanceof IntType || type instanceof DoubleType)
             return type;

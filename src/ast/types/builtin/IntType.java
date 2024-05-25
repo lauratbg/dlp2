@@ -65,9 +65,11 @@ public class IntType extends AbstractType {
 
     @Override
     public Type comparison(Type t) {
-        if(!this.isAssignable(t))
-            return super.comparison(t);
-        return t;
+        if (t instanceof ErrorType)
+            return t;
+        if (t instanceof IntType)
+            return this;
+        return new ErrorType(t.getLine(), t.getColumn(), "'" + t + "' does not support comparison operations with '" + this +"'");
     }
 
     @Override

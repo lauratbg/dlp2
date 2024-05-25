@@ -70,8 +70,10 @@ public class DoubleType extends AbstractType {
             return t;
         if(t instanceof DoubleType)
             return new IntType(t.getLine(), t.getColumn());
-        return super.comparison(t);
+        return new ErrorType(t.getLine(), t.getColumn(), "'" + t + "' does not support comparison operations with '" + this +"'");
     }
+
+
 
     @Override
     public Type logical(Type t) {
