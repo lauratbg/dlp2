@@ -30,28 +30,33 @@ public class Main {
 
         Visitor<Void, Void> identificationVisitor= new IdentificationVisitor();
         identificationVisitor.visit(ast, null);
-
-        Visitor<Type, Void> typeCheckingVisitor = new TypeCheckingVisitor();
-        typeCheckingVisitor.visit(ast, null);
-
-        Visitor<Void, Void> offsetVisitor = new OffsetVisitor();
-        offsetVisitor.visit(ast, null);
-
-        CodeGenerator codeGenerator = new CodeGenerator(args[1], args[0]);
-        AddressCGVisitor addressCGVisitor = new AddressCGVisitor(codeGenerator);
-        ValueCGVisitor valueCGVisitor = new ValueCGVisitor(codeGenerator, addressCGVisitor);
-
-        ast.accept(new ExecuteCGVisitor(codeGenerator, valueCGVisitor, addressCGVisitor), null);
-
-
-        if (ErrorHandler.getInstance().anyErrors()) {
+        if(ErrorHandler.getInstance().anyErrors())
             ErrorHandler.getInstance().showErrors(System.err);
-        }
         else {
-            // * The AST is shown if no errors exist
-            IntrospectorModel model = new IntrospectorModel(
-                    "Program", ast);
-            new IntrospectorView("Introspector", model);
+            Visitor<Type, Void> typeCheckingVisitor = new TypeCheckingVisitor();
+            typeCheckingVisitor.visit(ast, null);
+
+            Visitor<Void, Void> offsetVisitor = new OffsetVisitor();
+            offsetVisitor.visit(ast, null);
+
+            CodeGenerator codeGenerator = new CodeGenerator(args[1], args[0]);
+            AddressCGVisitor addressCGVisitor = new AddressCGVisitor(codeGenerator);
+            ValueCGVisitor valueCGVisitor = new ValueCGVisitor(codeGenerator, addressCGVisitor);
+
+            ast.accept(new ExecuteCGVisitor(codeGenerator, valueCGVisitor, addressCGVisitor), null);
+
+
+            if (ErrorHandler.getInstance().anyErrors()) {
+                ErrorHandler.getInstance().showErrors(System.err);
+            }
+            else {
+                // * The AST is shown if no errors exist
+                IntrospectorModel model = new IntrospectorModel(
+                        "Program", ast);
+                new IntrospectorView("Introspector", model);
+            }
         }
+
+
     }
 }

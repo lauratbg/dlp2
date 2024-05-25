@@ -155,7 +155,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
         unaryMinus.getExpression().accept(this, param);
 
         unaryMinus.setLvalue(false);
-        unaryMinus.setType(unaryMinus.getType().minus(unaryMinus.getLine(), unaryMinus.getColumn()));
+        unaryMinus.setType(unaryMinus.getExpression().getType().minus(unaryMinus.getLine(), unaryMinus.getColumn()));
         return null;
     }
 
@@ -215,7 +215,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
         super.visit(assignment, null);
         if (!assignment.getExpression1().getLvalue())
             new ErrorType(assignment.getExpression1().getLine(), assignment.getExpression1().getColumn(),
-                    "The lvalue in the assignment  must be true");
+                    "The lvalue in the assignment must be true");
         assignment.getExpression1().getType().assignTo(assignment.getExpression2().getType());
         return null;
     }

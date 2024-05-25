@@ -1,0 +1,70 @@
+
+#source "input3-wrong_lab09.txt"
+
+	' * Global variables:
+	' * int i (offset 0)
+	' * real f (offset 2)
+	' * record ([int a]) a (offset 6)
+
+' Invocation to the main function
+call main
+halt
+
+
+#line 	9
+
+ main: 
+	' * Parameters
+	' * Local variables
+	enter	0
+
+
+#line 	10
+	' * Write
+	pusha	0
+	loadi
+	pusha	2
+	loadf
+	and
+	oute
+
+
+#line 	11
+	' * Write
+	pusha	6
+	loade
+	pushi	3
+	gee
+	oute
+	' * While
+
+
+#line 	12
+ label0:
+	pusha	2
+	loadf
+	jz	label1
+	' * Body of the while statement
+	' * If statement
+
+
+#line 	13
+	pusha	2
+	loadf
+	jz	label2
+	' * Body of the if branch
+
+
+#line 	14
+	' * Write
+	pusha	2
+	loadf
+	not
+	oute
+	jmp	label3
+ label2:
+	' * Body of the else branch
+ label3:
+	jmp	label0
+ label1:
+	ret 0, 0, 0

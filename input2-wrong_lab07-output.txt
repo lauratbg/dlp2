@@ -1,0 +1,24 @@
+
+#source "input2-wrong_lab07.txt"
+
+	' * Global variables:
+
+' Invocation to the main function
+call main
+halt
+
+
+#line 	3
+
+ main: 
+	' * Parameters
+	' * Local variables
+	' * int i (offset -2)
+	enter	2
+
+
+#line 	5
+	' * Read
+	ini
+	storei
+	ret 0, 2, 0

@@ -1,0 +1,55 @@
+
+#source "input5-wrong_lab09.txt"
+
+	' * Global variables:
+	' * [10,int] v (offset 0)
+
+' Invocation to the main function
+call main
+halt
+
+
+#line 	4
+
+ main: 
+	' * Parameters
+	' * Local variables
+	' * int i (offset -2)
+	enter	2
+
+
+#line 	6
+	push	bp
+	pushi	-2
+	addi
+	pushi	0
+	pushi	0
+	muli
+	addi
+	pushi	0
+	storee
+
+
+#line 	7
+	pusha	0
+	pushi	3
+	pushi	2
+	muli
+	addi
+	pushf	3.4
+	storei
+
+
+#line 	8
+	pusha	0
+	pushi	1
+	pushi	2
+	muli
+	addi
+	pushi	2
+	pushi	0
+	muli
+	addi
+	pushb	97
+	storee
+	ret 0, 2, 0

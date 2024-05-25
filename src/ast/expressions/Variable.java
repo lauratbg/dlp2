@@ -5,7 +5,7 @@ import semantic.Visitor;
 
 import java.util.zip.DeflaterInputStream;
 
-public class Variable extends AbstractExpression{
+public class Variable extends AbstractExpression {
     private String name;
 
     // Needed for linking variables with its definitions in IdentificationVisitor

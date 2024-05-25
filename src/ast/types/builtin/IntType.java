@@ -69,6 +69,11 @@ public class IntType extends AbstractType {
     }
 
     @Override
+    public Type mustBeBoolean(int line, int column){
+        return this;
+    }
+
+    @Override
     public Type logical(Type t) {
         if (t instanceof IntType || t instanceof ErrorType)
             return t;

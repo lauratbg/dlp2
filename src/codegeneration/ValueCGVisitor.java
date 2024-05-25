@@ -2,6 +2,7 @@ package codegeneration;
 
 import ast.expressions.*;
 import ast.statements.FunctionInvocation;
+import ast.types.ErrorType;
 import ast.types.Type;
 import semantic.AbstractVisitor;
 
@@ -126,7 +127,6 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
      */
     @Override
     public Void visit(Comparison comparison, Void param) {
-
         Type highestType = comparison.getExpression1().getType().highestType(comparison.getExpression2().getType());
         comparison.getExpression1().accept(this, null);
         comparison.getExpression1().getType().convertTo(cg, highestType);

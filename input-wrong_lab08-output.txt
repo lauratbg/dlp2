@@ -1,0 +1,43 @@
+
+#source "input-wrong_lab08.txt"
+
+	' * Global variables:
+	' * int integer (offset 0)
+	' * char character (offset 2)
+	' * real real (offset 3)
+	' * real integer (offset 7)
+
+' Invocation to the main function
+call main
+halt
+
+
+#line 	5
+
+ p: 
+	' * Parameters
+	' * int a (offset 4)
+	' * Local variables
+	' * char a (offset -1)
+	enter	1
+	ret 0, 1, 2
+
+
+#line 	9
+
+ main: 
+	' * Parameters
+	' * Local variables
+	' * real character (offset -4)
+	enter	4
+
+
+#line 	11
+	' * Read
+	pusha	0
+	ini
+	storei
+
+
+#line 	11
+	' * Read

@@ -1,0 +1,85 @@
+
+#source "input1-wrong_lab07.txt"
+
+	' * Global variables:
+
+' Invocation to the main function
+call main
+halt
+
+
+#line 	3
+
+ f: 
+	' * Parameters
+	' * Local variables
+	' * int a (offset -2)
+	enter	2
+
+
+#line 	5
+	push	bp
+	pushi	-2
+	addi
+	pushi	0
+	storei
+
+
+#line 	6
+	' * Return
+	push	bp
+	pushi	-2
+	addi
+	loadi
+	ret 2, 2, 0
+
+
+#line 	8
+
+ main: 
+	' * Parameters
+	' * Local variables
+	' * int i (offset -2)
+	enter	2
+
+
+#line 	10
+	pushi	3
+	storei
+
+
+#line 	11
+	pushi	2
+	storei
+
+
+#line 	12
+	push	bp
+	pushi	-2
+	addi
+	loadi
+	storei
+
+
+#line 	13
+	pushi	1
+	storei
+
+
+#line 	14
+	pushi	0
+	storei
+
+
+#line 	15
+	push	bp
+	pushi	-2
+	addi
+	loadi
+	storei
+
+
+#line 	16
+	pushi	0
+	storef
+	ret 0, 2, 0

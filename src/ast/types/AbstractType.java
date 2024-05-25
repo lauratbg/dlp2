@@ -72,8 +72,7 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
     @Override
     public Type mustBeBoolean(int line, int column) {
-//        return new ErrorType(line, column, "The type '" + this +"' must be boolean");
-        return null;
+        return new ErrorType(line, column, "The type '" + this +"' must be boolean");
     }
 
     @Override
@@ -113,7 +112,7 @@ public abstract class AbstractType extends AbstractASTNode implements Type {
 
     @Override
     public Type highestType(Type type) {
-        return null;
+        return this;
     }
 
 }
