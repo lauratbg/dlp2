@@ -36,11 +36,14 @@ public class DoubleType extends AbstractType {
                 "The double '" + t + "' can NOT be assigned to type '" + this + "'"
         );
     }
+
     @Override
     public Type arithmetic(Type t) {
-        if(!this.isAssignable(t))
-            return super.arithmetic(t);
-        return t;
+        if (t instanceof ErrorType)
+            return t;
+        if (t instanceof DoubleType)
+            return this;
+        return new ErrorType(t.getLine(), t.getColumn(), "'" + t + "' does not support arithmetic operations with '" + this +"'");
     }
 
     @Override

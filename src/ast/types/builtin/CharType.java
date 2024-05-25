@@ -79,9 +79,11 @@ public class CharType extends AbstractType {
 
     @Override
     public Type arithmetic(Type type) {
-        if (type instanceof CharType || type instanceof ErrorType)
-            return new IntType(type.getLine(), type.getColumn());
-        return super.modulus(type);
+        if (type instanceof ErrorType)
+            return type;
+        if (type instanceof CharType)
+            return this;
+        return new ErrorType(type.getLine(), type.getColumn(), "'" + type + "' does not support arithmetic operations with '" + this +"'");
     }
 
     @Override
