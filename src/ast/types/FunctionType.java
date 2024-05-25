@@ -54,12 +54,4 @@ public class FunctionType extends AbstractType{
         return returnType;
     }
 
-    public int sumBytesParam() {
-        return getVarDefinitionList().stream().
-                mapToInt(
-                        param -> param.getType().numberOfBytes()
-                ).
-                sum();
-
-    }
 }

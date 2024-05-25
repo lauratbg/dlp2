@@ -244,6 +244,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO, Void> {
      */
     @Override
     public Void visit(Return ret, ExecuteCGDTO param) {
+
         cg.writeLine(ret.getLine());
         cg.addComment("Return");
         ret.getExpression().accept(valueCGVisitor, null);
@@ -266,7 +267,6 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO, Void> {
             exp.accept(valueCGVisitor, null);
         cg.writeLine(functionInvocation.getLine());
         cg.call(functionInvocation.functionName.getName());
-        System.out.println(functionInvocation.getReturnType());
 
         if (!(((FunctionType)functionInvocation.getFunctionName().getType()).getReturnType() instanceof VoidType))
             cg.pop(((FunctionType)functionInvocation.getFunctionName().getType()).getReturnType());

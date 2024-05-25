@@ -198,6 +198,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<Type, Void> {
      */
     @Override
     public Void visit(FunctionInvocation functionInvocation, Type param) {
+
         for (int i = 0; i < functionInvocation.getParams().size(); i++)
             functionInvocation.getParams().get(i).accept(this, param);
         functionInvocation.getFunctionName().accept(this, param);
