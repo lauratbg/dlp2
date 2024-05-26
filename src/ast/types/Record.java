@@ -35,7 +35,6 @@ public class Record extends AbstractType {
     public RecordField getRecordField(String field) {
         for (RecordField recordField : recordFieldList) {
             if (recordField.getName().equals(field)){
-                System.out.println(field);
                 return recordField;
 
             }
