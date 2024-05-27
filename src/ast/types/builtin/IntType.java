@@ -1,6 +1,7 @@
 package ast.types.builtin;
 
 import ast.types.AbstractType;
+import ast.types.BoolType;
 import ast.types.ErrorType;
 import ast.types.Type;
 import codegeneration.CodeGenerator;
@@ -68,21 +69,21 @@ public class IntType extends AbstractType {
         if (t instanceof ErrorType)
             return t;
         if (t instanceof IntType)
-            return this;
+            return new BoolType(t.getLine(), t.getColumn());
         return new ErrorType(t.getLine(), t.getColumn(), "'" + t + "' does not support comparison operations with '" + this +"'");
     }
 
-    @Override
-    public Type mustBeBoolean(int line, int column){
-        return this;
-    }
+//    @Override
+//    public Type mustBeBoolean(int line, int column){
+//        return this;
+//    }
 
-    @Override
-    public Type logical(Type t) {
-        if (t instanceof IntType || t instanceof ErrorType)
-            return t;
-        return super.logical(t);
-    }
+//    @Override
+//    public Type logical(Type t) {
+//        if (t instanceof IntType || t instanceof ErrorType)
+//            return t;
+//        return super.logical(t);
+//    }
 
     @Override
     public Type modulus(Type t) {

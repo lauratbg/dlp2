@@ -1,0 +1,128 @@
+
+#source "exam2.txt"
+
+	' * Global variables:
+
+' Invocation to the main function
+call main
+halt
+
+
+#line 	1
+
+ greater: 
+	' * Parameters
+	' * int a (offset 4)
+	' * Local variables
+	enter	0
+
+
+#line 	2
+	' * Return
+	push	bp
+	pushi	4
+	addi
+	loadi
+	pushi	1
+	gti
+	ret 2, 0, 2
+
+
+#line 	5
+
+ main: 
+	' * Parameters
+	' * Local variables
+	' * int a (offset -2)
+	' * real d (offset -6)
+	enter	6
+
+
+#line 	8
+	push	bp
+	pushi	-2
+	addi
+	pushi	3
+	storei
+
+
+#line 	9
+	push	bp
+	pushi	-6
+	addi
+	pushf	3.3
+	storef
+	push	bp
+	pushi	-2
+	addi
+	loadi
+	pushi	3
+	eqi
+
+
+#line 	10
+	call	greater
+	popi
+	' * If statement
+
+
+#line 	11
+	pushi	1
+	jz	label0
+	' * Body of the if branch
+
+
+#line 	12
+	push	bp
+	pushi	-2
+	addi
+	push	bp
+	pushi	-6
+	addi
+	loadf
+	pushf	3.3
+	gtf
+	storei
+	jmp	label1
+ label0:
+	' * Body of the else branch
+ label1:
+
+
+#line 	13
+	push	bp
+	pushi	-2
+	addi
+	pushi	1
+	pushb	51
+	pushb	50
+	gtb
+	adde
+	storei
+
+
+#line 	14
+	' * Write
+	push	bp
+	pushi	-2
+	addi
+	loadi
+	pushi	3
+	gti
+	oute
+	' * While
+
+
+#line 	15
+ label2:
+	pushi	0
+	jz	label3
+	' * Body of the while statement
+
+
+#line 	16
+	' * Write
+	oute
+	jmp	label2
+ label3:
+	ret 0, 6, 0

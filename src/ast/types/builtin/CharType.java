@@ -1,6 +1,7 @@
 package ast.types.builtin;
 
 import ast.types.AbstractType;
+import ast.types.BoolType;
 import ast.types.ErrorType;
 import ast.types.Type;
 import codegeneration.CodeGenerator;
@@ -104,7 +105,7 @@ public class CharType extends AbstractType {
         if (t instanceof ErrorType)
             return t;
         if (t instanceof CharType)
-            return this;
+            return new BoolType(t.getLine(), t.getColumn());
         return new ErrorType(t.getLine(), t.getColumn(), "'" + t + "' does not support comparison operations with '" + this +"'");
     }
 

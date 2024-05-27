@@ -2,6 +2,7 @@ package codegeneration;
 
 import ast.expressions.*;
 import ast.statements.FunctionInvocation;
+import ast.types.BoolType;
 import ast.types.ErrorType;
 import ast.types.Type;
 import semantic.AbstractVisitor;
@@ -14,6 +15,8 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
         super(cg);
         this.addressCGVisitor = addressCGVisitor;
     }
+
+
 
     // Integer
     /*
@@ -133,6 +136,7 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
         comparison.getExpression2().accept(this, null);
         comparison.getExpression2().getType().convertTo(cg, highestType);
 
+
         switch (comparison.getOperator()) {
             case ">": cg.gt(highestType.suffix());
                 break;
@@ -146,7 +150,11 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
                 break;
             case "!=": cg.ne(highestType.suffix());
                 break;
+
         }
+
+        // it should print true or false
+        System.out.println(((BoolType)(comparison.getType())).getValue());
 
 
         return null;
@@ -176,6 +184,10 @@ public class ValueCGVisitor extends AbstractCGVisitor<Void, Void> {
             case "||":
                 cg.or(); break;
         }
+
+        // it should print true or false
+        System.out.println(((BoolType)(logical.getType())).getValue());
+
         return null;
     }
 

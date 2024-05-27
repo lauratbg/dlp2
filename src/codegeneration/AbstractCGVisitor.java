@@ -134,6 +134,11 @@ public abstract class AbstractCGVisitor<TP, TR> implements Visitor<TP, TR> {
     }
 
     @Override
+    public TR visit(BoolType v, TP param) {
+        return null;
+    }
+
+    @Override
     public TR visit(FunctionType function, TP param) {
         return null;
     }

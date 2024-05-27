@@ -7,6 +7,7 @@ import ast.program.FuncDefinition;
 import ast.program.Program;
 import ast.program.VarDefinition;
 import ast.statements.*;
+import ast.types.BoolType;
 import ast.types.FunctionType;
 import ast.types.VoidType;
 import semantic.AbstractVisitor;
@@ -52,6 +53,7 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO, Void> {
         cg.addComment("Write");
         write.getExpression().accept(valueCGVisitor, null);
         cg.out(write.getExpression().getType().suffix());
+
         return null;
     }
 
@@ -224,13 +226,15 @@ public class ExecuteCGVisitor extends AbstractCGVisitor<ExecuteCGDTO, Void> {
         String exitLabel = cg.nextLabel();
         cg.jz(elseBody);
         cg.addComment("Body of the if branch");
-        for(Statement statement : ifElse.getIfList())
+        for(Statement statement : ifElse.getIfList()){
             statement.accept(this, param);
+        }
         cg.jmp(exitLabel);
         cg.write(" " + elseBody + ":");
         cg.addComment("Body of the else branch");
-        for(Statement statement : ifElse.getElseList())
+        for(Statement statement : ifElse.getElseList()){
             statement.accept(this, param);
+        }
 
         cg.write(" " + exitLabel + ":");
         return null;

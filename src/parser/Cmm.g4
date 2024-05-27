@@ -156,6 +156,8 @@ builtin returns [Type ast]:
         I = 'int'       {$ast = new IntType($I.getLine(), $I.getCharPositionInLine()+1);}
        | D = 'double'   {$ast = new DoubleType($D.getLine(), $D.getCharPositionInLine()+1);}
        | C = 'char'     {$ast = new CharType($C.getLine(), $C.getCharPositionInLine()+1);}
+       | B = 'bool'     {$ast = new BoolType($B.getLine(), $B.getCharPositionInLine()+1);}
+
        ;
 
 // returns void and receives no parameters.
@@ -206,6 +208,12 @@ main returns [FuncDefinition ast]:
                | '\'' '\\' INT_CONSTANT '\''
                | '\'' (. | '\\n' | '\\t' | '\\r') '\''
                ;
+
+  TRUE: 'true'
+      ;
+
+  FALSE: 'false'
+       ;
 
   //  The two special char constants '\n' and '\t'
   // [\r\n\t   ]+ not necessary the + bc it's triggered whenever appears a blank

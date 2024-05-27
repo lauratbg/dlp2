@@ -28,6 +28,8 @@ public interface Visitor<TP, TR> {
     TR visit(UnaryNot unaryNot, TP param);
     TR visit(Variable variable, TP param);
 
+
+
     //  Program
     TR visit(FuncDefinition funcDefinition, TP param);
     TR visit(Program program, TP param);
@@ -52,6 +54,7 @@ public interface Visitor<TP, TR> {
     TR visit(CharType charType, TP param);
     TR visit(DoubleType doubleType, TP param);
     TR visit(IntType intType, TP param);
+    TR visit(BoolType boolType, TP param);
 
 
 

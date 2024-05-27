@@ -1,6 +1,7 @@
 package ast.types.builtin;
 
 import ast.types.AbstractType;
+import ast.types.BoolType;
 import ast.types.ErrorType;
 import ast.types.Type;
 import codegeneration.CodeGenerator;
@@ -69,18 +70,18 @@ public class DoubleType extends AbstractType {
         if(t instanceof ErrorType)
             return t;
         if(t instanceof DoubleType)
-            return new IntType(t.getLine(), t.getColumn());
+            return new BoolType(t.getLine(), t.getColumn());
         return new ErrorType(t.getLine(), t.getColumn(), "'" + t + "' does not support comparison operations with '" + this +"'");
     }
 
 
 
-    @Override
-    public Type logical(Type t) {
-        if(!this.isAssignable(t))
-            return super.logical(t);
-        return t;
-    }
+//    @Override
+//    public Type logical(Type t) {
+//        if(!this.isAssignable(t))
+//            return super.logical(t);
+//        return t;
+//    }
 
     @Override
     public Type modulus(Type t) {
